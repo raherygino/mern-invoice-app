@@ -1,6 +1,6 @@
 import Form from 'react-bootstrap/Form'
 
-const Input = ({id, type, label}) => {
+const Input = ({id, type, label, onChange, value}) => {
 
     return (
         <Form.Floating className="mb-5">
@@ -8,8 +8,10 @@ const Input = ({id, type, label}) => {
             id={id}
             type={type}
             name={id}
+            value={value}
+            onChange={onChange}
             placeholder={label} />
-          <label htmlFor="floatingInputCustom">{label}</label>
+          <label htmlFor="id">{label}</label>
         </Form.Floating>
     )
 }

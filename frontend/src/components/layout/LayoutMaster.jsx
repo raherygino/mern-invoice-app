@@ -3,8 +3,20 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { Outlet } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { logout, reset } from '../../features/auth/authSlice'
 
 const LayoutMaster = () => {
+    
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+  
+    const onLogout = () => {
+      dispatch(logout())
+      dispatch(reset())
+      navigate('/login')
+    }
 
     return(
         <>
@@ -48,7 +60,7 @@ const LayoutMaster = () => {
                                 <NavDropdown.Item href="#">Profile</NavDropdown.Item>
                                 <NavDropdown.Item href="#">Settings</NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item href="#">Logout</NavDropdown.Item>
+                                <NavDropdown.Item  onClick={onLogout}>Logout</NavDropdown.Item>
                             </NavDropdown>
                         </Nav>
                     </Navbar.Collapse>
