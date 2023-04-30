@@ -8,21 +8,22 @@ import LayoutAuth from './components/layout/LayoutAuth'
 import Home from './pages/Home'
 import Register from './pages/Register'
 import Forgot from './pages/Forgot'
+import LayoutMaster from './components/layout/LayoutMaster'
 
 function App() {
   return (
     <>
-      <Router >
-        <div className='container'>
-          <Routes>
-            <Route element={<LayoutAuth/>}>
-              <Route path='/login' element={<Login />} />
-              <Route path='/register' element={<Register />} />
-              <Route path='/forgot' element={<Forgot />} />
-            </Route>
+      <Router>
+        <Routes>
+          <Route element={<LayoutAuth/>}>
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
+            <Route path='/forgot' element={<Forgot />} />
+          </Route>
+          <Route element={<LayoutMaster/>}>
             <Route path='/' element={<Home />} />
-          </Routes>
-        </div>
+          </Route>
+        </Routes>
       </Router>
       <ToastContainer />
     </>
