@@ -10,10 +10,12 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { register, reset } from '../features/auth/authSlice'
 import Spinner from "../components/Spinner"
+import organizationService from "../features/organization/organizationService"
 
 const Register = () => {
 
     const [formData, setFormData] = useState({
+        organization: '',
         lastname: '',
         firstname: '',
         birth_date: '',
@@ -21,9 +23,10 @@ const Register = () => {
         phone: '',
         email: '',
         password: '',
+        name: ''
     })
   
-    const { lastname, firstname, birth_date, birth_place, phone, email, password } = formData
+    const { organization, lastname, firstname, birth_date, birth_place, phone, email, password, name } = formData
   
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -52,19 +55,31 @@ const Register = () => {
     }
   
     const onSubmit = (e) => {
-      e.preventDefault()
-  
-        const userData = {
-            lastname,
-            firstname,
-            birth_date,
-            birth_place,
-            phone,
-            email,
-            password,
-        }
+        e.preventDefault()
 
-        dispatch(register(userData))
+        organizationService.createOrganization({name,})
+            .then((res) => {
+                const organization = res._id
+                formData.organization = organization
+        
+                const userData = {
+                    organization,
+                    lastname,
+                    firstname,
+                    birth_date,
+                    birth_place,
+                    phone,
+                    email,
+                    password,
+                }
+
+                console.log(userData)
+                dispatch(register(userData))
+
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     if (isLoading) {
@@ -119,9 +134,11 @@ const Register = () => {
                 </Row>
 
                 <Input
-                    id="organization"
+                    id="name"
                     type="text"
-                    label="Organization" />
+                    label="Organization" 
+                    value={name}
+                    onChange={onChange} />
                 
                 <Input
                     id="phone"

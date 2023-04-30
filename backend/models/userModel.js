@@ -2,6 +2,13 @@ const mongoose = require('mongoose')
 
 const userSchema = mongoose.Schema(
   {
+    
+    organization: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'Organization',
+    },
+
     lastname: {
       type: String,
       required: [true, 'Please add a lastname'],

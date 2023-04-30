@@ -1,11 +1,11 @@
 const mongoose = require('mongoose')
 
-const userSchema = mongoose.Schema(
+const organizationSchema = mongoose.Schema(
     {
         name: {
             type: String,
-            require: [true, "Please add name"]
-        },
+            require: [true, 'Add name']
+        },/*
         
         logo: {
             type: String,
@@ -35,6 +35,11 @@ const userSchema = mongoose.Schema(
         phone: {
             type: String,
             require: false
-        }
+        }*/
+    },
+    {
+      timestamps: true,
     }
 )
+
+module.exports = mongoose.model('Organization', organizationSchema)

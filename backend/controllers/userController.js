@@ -7,9 +7,9 @@ const User = require('../models/userModel')
 // @route   POST /api/users
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { lastname, firstname, birth_date, birth_place, phone, email, password } = req.body
+  const { organization, lastname, firstname, birth_date, birth_place, phone, email, password } = req.body
 
-  if (!lastname || !firstname || !birth_date || !birth_place || !phone || !email || !password) {
+  if (!organization || !lastname || !firstname || !birth_date || !birth_place || !phone || !email || !password) {
     res.status(400)
     throw new Error('Please add all fields')
   }
@@ -28,6 +28,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   // Create user
   const user = await User.create({
+    organization,
     lastname,
     firstname,
     birth_date,
@@ -40,6 +41,7 @@ const registerUser = asyncHandler(async (req, res) => {
   if (user) {
     res.status(201).json({
       _id: user.id,
+      organization: user.organization,
       lastname: user.lastname,
       firstname: user.firstname,
       birth_date: user.birth_date,
@@ -66,6 +68,7 @@ const loginUser = asyncHandler(async (req, res) => {
   if (user && (await bcrypt.compare(password, user.password))) {
     res.json({
       _id: user.id,
+      organization: user.organization,
       lastname: user.lastname,
       firstname: user.firstname,
       birth_date: user.birth_date,

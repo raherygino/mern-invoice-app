@@ -3,12 +3,14 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
 import { Outlet } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { logout, reset } from '../../features/auth/authSlice'
 
 const LayoutMaster = () => {
 
     const dispatch = useDispatch()
+
+    const { user } = useSelector((state) => state.auth)
 
     const onLogout = () => {
       dispatch(logout())
@@ -53,7 +55,7 @@ const LayoutMaster = () => {
                         </Nav>
                         
                         <Nav>
-                            <NavDropdown title="Username" id="basic-nav-dropdown">
+                            <NavDropdown title={user && `${user.lastname} ${user.firstname}`} id="basic-nav-dropdown">
                                 <NavDropdown.Item href="#">Profile</NavDropdown.Item>
                                 <NavDropdown.Item href="#">Settings</NavDropdown.Item>
                                 <NavDropdown.Divider />
