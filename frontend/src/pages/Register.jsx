@@ -26,7 +26,7 @@ const Register = () => {
         name: ''
     })
   
-    const { organization, lastname, firstname, birth_date, birth_place, phone, email, password, name } = formData
+    const { lastname, firstname, birth_date, birth_place, phone, email, password, name } = formData
   
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -72,8 +72,6 @@ const Register = () => {
                     email,
                     password,
                 }
-
-                console.log(userData)
                 dispatch(register(userData))
 
             })
