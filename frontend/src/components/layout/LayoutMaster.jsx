@@ -1,21 +1,18 @@
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import { Outlet } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom'
+import Container from 'react-bootstrap/Container'
+import Nav from 'react-bootstrap/Nav'
+import Navbar from 'react-bootstrap/Navbar'
+import NavDropdown from 'react-bootstrap/NavDropdown'
+import { Outlet } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { logout, reset } from '../../features/auth/authSlice'
 
 const LayoutMaster = () => {
-    
-    const navigate = useNavigate()
+
     const dispatch = useDispatch()
-  
+
     const onLogout = () => {
       dispatch(logout())
       dispatch(reset())
-      navigate('/login')
     }
 
     return(
