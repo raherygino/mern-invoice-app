@@ -8,8 +8,16 @@ const createOrganization = async (organizationData) => {
     return response.data
 }
 
+// get Organization by Id
+const getOrganization = async (id) => {
+    const response = await axios.get(`${API_URL}show/${id}`)
+    return response.data
+}
+
+
 const organizationService = {
     createOrganization,
+    getOrganization,
 }
 
 

@@ -12,7 +12,7 @@ import LayoutMaster from './components/layout/LayoutMaster'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUsers, reset } from './features/users/userSlice'
-
+import { getOrganization } from './features/organization/organizationSlice'
 function App() {
   
   const dispatch = useDispatch()
@@ -22,14 +22,19 @@ function App() {
     (state) => state.users
   )
 
+  const {organization } = useSelector(
+    (state) => state.organization
+  )
+
   useEffect(() => {
 
     dispatch(getUsers())
+    dispatch(getOrganization())
 
     return () => {
       dispatch(reset())
     }
-  }, [user, isError, message, dispatch])
+  }, [ user, isError, message, dispatch])
 
   return (
     <>
@@ -40,7 +45,7 @@ function App() {
             <Route path='/register' element={<Register />} />
             <Route path='/forgot' element={<Forgot />} />
           </Route>
-          <Route element={<LayoutMaster/>}>
+          <Route element={<LayoutMaster userAuth={ users } organization={organization} />}>
             <Route path='/' element={<Home user={users} />} />
           </Route>
         </Routes>

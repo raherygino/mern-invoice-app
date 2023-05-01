@@ -1,11 +1,11 @@
 
 
 
-const Home = ({user}) => {
+const Home = ({user, data}) => {
 
     return(
         <>
-            <h1>Bonjour { user.lastname } </h1>
+            <h1>Bonjour { user.lastname }</h1>
         </>
     )
 }

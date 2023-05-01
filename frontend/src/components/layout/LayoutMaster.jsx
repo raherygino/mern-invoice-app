@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { logout, reset } from '../../features/auth/authSlice'
 import { useEffect } from 'react'
 
-const LayoutMaster = () => {
+const LayoutMaster = ({organization, userAuth}) => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -29,7 +29,7 @@ const LayoutMaster = () => {
         <>
             <Navbar bg="dark" variant='dark' expand="lg">
                 <Container fluid>
-                    <Navbar.Brand href="#">Invoice MERN</Navbar.Brand>
+                    <Navbar.Brand href="#">{ organization.name }</Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" />
                     <Navbar.Collapse id="navbarScroll">
                         <Nav
@@ -63,7 +63,7 @@ const LayoutMaster = () => {
                         </Nav>
                     
                         <Nav>
-                            <NavDropdown title="Username" id="basic-nav-dropdown">
+                            <NavDropdown title={ `${userAuth.lastname} ${userAuth.firstname}` } id="basic-nav-dropdown">
                                 <NavDropdown.Item href="#">Profile</NavDropdown.Item>
                                 <NavDropdown.Item href="#">Settings</NavDropdown.Item>
                                 <NavDropdown.Divider />
