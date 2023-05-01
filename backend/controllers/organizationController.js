@@ -6,7 +6,7 @@ const Organization = require('../models/organizationModel')
 // @route   GET /api/organizations
 // @access  Private
 const getOrganizations = asyncHandler(async (req, res) => {
-  const organization = await Organization.find(req.params.id)
+  const organization = await Organization.findById(req.params.id)
 
   res.status(200).json(organization)
 })
