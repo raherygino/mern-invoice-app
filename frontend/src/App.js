@@ -3,16 +3,21 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import './assets/css/style.css'
-import Login from './pages/Login';
+import './assets/css/main.css'
+import Login from './pages/auth/Login';
 import LayoutAuth from './components/layout/LayoutAuth'
 import Home from './pages/Home'
-import Register from './pages/Register'
-import Forgot from './pages/Forgot'
+import Register from './pages/auth/Register'
+import Forgot from './pages/auth/Forgot'
 import LayoutMaster from './components/layout/LayoutMaster'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUsers, reset } from './features/users/userSlice'
 import { getOrganization } from './features/organization/organizationSlice'
+import Products from './pages/products/Products'
+import Invoices from './pages/invoices/Invoices'
+import NewProduct from './pages/products/NewProduct'
+import NewInvoice from './pages/invoices/NewInvoice'
 function App() {
   
   const dispatch = useDispatch()
@@ -47,6 +52,10 @@ function App() {
           </Route>
           <Route element={<LayoutMaster userAuth={ users } organization={organization} />}>
             <Route path='/' element={<Home user={users} />} />
+            <Route path='/new-product' element={ <NewProduct />} />
+            <Route path='/products' element={ <Products />} />
+            <Route path='/new-invoice' element={ <NewInvoice />} />
+            <Route path='/invoices' element={ <Invoices />} />
           </Route>
         </Routes>
       </Router>

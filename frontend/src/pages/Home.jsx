@@ -1,7 +1,7 @@
 
 
 
-const Home = ({user, data}) => {
+const Home = ({user}) => {
 
     return(
         <>

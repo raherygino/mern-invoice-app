@@ -1,0 +1,20 @@
+
+
+.menu-text {
+    font-size: 10pt;
+    margin-top: 8px;
+}
+
+.nav-link {
+    border-radius: 4px;
+    border: solid 1px #ffffff00;
+}
+
+.nav-link:hover{
+    background-color: #ffffff22;
+}
+
+.active {
+    background-color: #ffffff10;
+    border: solid 1px #ffffff22;
+}

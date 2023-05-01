@@ -1,4 +1,4 @@
-import Input from "../components/form/Input"
+import Input from "../../components/form/Input"
 import Card from "react-bootstrap/Card"
 import Button from "react-bootstrap/Button"
 import { Link } from "react-router-dom"
@@ -8,9 +8,9 @@ import { toast } from 'react-toastify'
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { register, reset } from '../features/auth/authSlice'
-import Spinner from "../components/Spinner"
-import organizationService from "../features/organization/organizationService"
+import { register, reset } from '../../features/auth/authSlice'
+import Spinner from "../../components/Spinner"
+import organizationService from "../../features/organization/organizationService"
 
 const Register = () => {
 
