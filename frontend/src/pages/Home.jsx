@@ -9,17 +9,15 @@ const Home = () => {
   const dispatch = useDispatch()
 
   const { user } = useSelector((state) => state.auth)
-  const { users, isLoading, isError, message } = useSelector(
+  const { users, isError, message } = useSelector(
     (state) => state.users
   )
-
-  console.log(users)
+  if (isError) {
+    console.log(message)
+  }
+  
 
   useEffect(() => {
-    if (isError) {
-      console.log(message)
-    }
-    
 
     if (!user) {
       navigate('/login')
@@ -34,7 +32,7 @@ const Home = () => {
 
     return(
         <>
-            <h1></h1>
+            <h1>Bonjour { users.lastname } {isError && message}</h1>
         </>
     )
 }

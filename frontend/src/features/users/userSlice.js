@@ -14,8 +14,8 @@ export const getUsers = createAsyncThunk(
   'users/info',
   async (_, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.token
-      return await userService.getUserData(token)
+      const id = thunkAPI.getState().auth.user._id
+      return await userService.getUserData(id)
     } catch (error) {
       const message =
         (error.response &&

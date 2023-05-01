@@ -3,26 +3,13 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
 import { Outlet } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { logout, reset } from '../../features/auth/authSlice'
-import axios from 'axios'
-import { useState } from 'react'
 
 const LayoutMaster = () => {
 
     const dispatch = useDispatch()
-    const { user } = useSelector((state) => state.auth)
-    const [userAuth, setUserAuth] = useState({})
-
-    if (user != null) {
-        axios.get(`http://127.0.0.1:5000/api/users/info/${user._id}`)
-            .then((res) => {
-                setUserAuth(res.data)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    }
+    //const { user } = useSelector((state) => state.auth)
 
 
     const onLogout = () => {
@@ -68,7 +55,7 @@ const LayoutMaster = () => {
                         </Nav>
                     
                         <Nav>
-                            <NavDropdown title={ `${userAuth.lastname} ${userAuth.firstname}` } id="basic-nav-dropdown">
+                            <NavDropdown title="" id="basic-nav-dropdown">
                                 <NavDropdown.Item href="#">Profile</NavDropdown.Item>
                                 <NavDropdown.Item href="#">Settings</NavDropdown.Item>
                                 <NavDropdown.Divider />
