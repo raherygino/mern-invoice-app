@@ -40,14 +40,14 @@ const registerUser = asyncHandler(async (req, res) => {
 
   if (user) {
     res.status(201).json({
-      _id: user.id,
+      _id: user.id,/*
       organization: user.organization,
       lastname: user.lastname,
       firstname: user.firstname,
       birth_date: user.birth_date,
       birth_place: user.birth_place,
       phone: user.phone,
-      email: user.email,
+      email: user.email,*/
       token: generateToken(user._id),
     })
   } else {
@@ -67,19 +67,28 @@ const loginUser = asyncHandler(async (req, res) => {
 
   if (user && (await bcrypt.compare(password, user.password))) {
     res.json({
-      _id: user.id,
+      _id: user.id,/*
       organization: user.organization,
       lastname: user.lastname,
       firstname: user.firstname,
       birth_date: user.birth_date,
       birth_place: user.birth_place,
-      email: user.email,
+      email: user.email,*/
       token: generateToken(user._id),
     })
   } else {
     res.status(400)
     throw new Error('Invalid credentials')
   }
+})
+
+// @desc    Get user data
+// @route   GET /api/users/me
+// @access  Public
+
+const getInfo = asyncHandler(async (req, res, next) => {
+  const user = await User.findOne({_id : req.params.id})
+  res.status(200).json(user)
 })
 
 // @desc    Get user data
@@ -100,4 +109,5 @@ module.exports = {
   registerUser,
   loginUser,
   getMe,
+  getInfo,
 }
