@@ -9,8 +9,28 @@ import Home from './pages/Home'
 import Register from './pages/Register'
 import Forgot from './pages/Forgot'
 import LayoutMaster from './components/layout/LayoutMaster'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { getUsers, reset } from './features/users/userSlice'
 
 function App() {
+  
+  const dispatch = useDispatch()
+
+  const { user } = useSelector((state) => state.auth)
+  const { users, isError, message } = useSelector(
+    (state) => state.users
+  )
+
+  useEffect(() => {
+
+    dispatch(getUsers())
+
+    return () => {
+      dispatch(reset())
+    }
+  }, [user, isError, message, dispatch])
+
   return (
     <>
       <Router>
@@ -21,7 +41,7 @@ function App() {
             <Route path='/forgot' element={<Forgot />} />
           </Route>
           <Route element={<LayoutMaster/>}>
-            <Route path='/' element={<Home />} />
+            <Route path='/' element={<Home user={users} />} />
           </Route>
         </Routes>
       </Router>
