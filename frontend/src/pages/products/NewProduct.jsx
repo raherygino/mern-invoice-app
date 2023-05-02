@@ -60,14 +60,14 @@ const NewProduct = () => {
                                     label="Price" />
                             </Col>
                         </Row>
-                        <div>
-                            <ReactQuill theme="snow" />
+                        
+                        <ReactQuill theme="snow" />
 
-                        </div>
-
-
-
-                        <Button variant="primary" className='mt-8'>Go somewhere</Button>
+                        <Button 
+                            variant="primary"
+                            className='mt-2'>
+                                Add
+                        </Button>
                     </Card.Body>
                 </Card>
             </Container>
