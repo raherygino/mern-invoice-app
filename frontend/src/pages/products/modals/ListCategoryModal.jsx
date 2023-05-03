@@ -3,7 +3,7 @@ import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import ConfirmDialog from '../../../components/form/ConfirmDialog';
 
-const ListCategoryModal = ({ show, onHide, categories, onSuccess }) => {
+const ListCategoryModal = ({ show, onHide, categories, onSuccess, onEdit }) => {
 
     const onDelete = (id) => {
         ConfirmDialog({
@@ -14,8 +14,9 @@ const ListCategoryModal = ({ show, onHide, categories, onSuccess }) => {
         })
     }
 
-    const onEdit = () => {
-        console.log("edit")
+    const onSubmit = (e) => {
+        e.preventDefault()
+        onHide(false)
     }
 
     return(
@@ -24,6 +25,8 @@ const ListCategoryModal = ({ show, onHide, categories, onSuccess }) => {
             size="md"
             show={show}
             onHide={onHide}
+            onSubmit={onSubmit}
+            disabledBtnCancel={false}
             title="List Category">
                 
             <Table bordered hover size="sm">
@@ -38,7 +41,7 @@ const ListCategoryModal = ({ show, onHide, categories, onSuccess }) => {
                     <tr key={category._id}>
                         <td className='pt-3'>{ category.name }</td>
                         <td width={100} align='center'>
-                            <Button variant="light" onClick={() => onEdit()} className="btn-icon btn-sm me-2">
+                            <Button variant="light" onClick={() => onEdit(category._id)} className="btn-icon btn-sm me-2">
 								<span className="svg-icon svg-icon-success svg-icon-md">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">

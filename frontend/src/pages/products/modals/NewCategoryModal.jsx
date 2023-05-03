@@ -3,6 +3,7 @@ import FormModal from "../../../components/form/FormModal"
 import Input from "../../../components/form/Input"
 import { createCategory } from "../../../features/categories/categorySlice"
 import { useDispatch } from "react-redux"
+import Swal from "sweetalert2"
 
 const NewCategoryModal = ({show, onHide, organization}) => {
 
@@ -16,8 +17,23 @@ const NewCategoryModal = ({show, onHide, organization}) => {
 
     const onSubmit = (e) => {
         e.preventDefault()
-        dispatch(createCategory({ name: nameCategory, organization: organization }))
-        onHide(false)
+
+        if (nameCategory !== "") {
+            dispatch(createCategory({ 
+                name: nameCategory, 
+                organization: organization }))
+            setNameCategory('')
+            onHide(false)
+        } else {
+            setNameCategory('')
+            Swal.fire({
+                position: 'top-center',
+                title: "",
+                text: "Category name required",
+                icon: 'error'
+            })
+        }
+        
     }
 
     return(

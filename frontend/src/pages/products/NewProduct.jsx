@@ -29,6 +29,10 @@ const NewProduct = ({organization}) => {
         listCategory: false,
         subCategory: false,
     })
+
+    const onEdit = (id) => {
+        console.log(id)
+    }
     
     const onSuccess = () => {
         dispatch(getCategories())
@@ -65,6 +69,7 @@ const NewProduct = ({organization}) => {
                         organization={organization}
                         categories={categories}
                         onSuccess={onSuccess}
+                        onEdit={onEdit}
                         onHide={() => setModal({listCategory: false})} />
                     
                     <Button variant='info' onClick={() => setModal({subCategory: true})}>New sub category</Button>

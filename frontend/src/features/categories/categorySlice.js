@@ -55,6 +55,20 @@ export const categorySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(createCategory.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(createCategory.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.categories = action.payload
+      })
+      .addCase(createCategory.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+
       .addCase(getCategories.pending, (state) => {
         state.isLoading = true
       })
