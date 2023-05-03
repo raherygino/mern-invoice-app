@@ -28,6 +28,25 @@ export const getCategories = createAsyncThunk(
   }
 )
 
+// Create new category
+export const createCategory = createAsyncThunk(
+  'category/create',
+  async (categoryData, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token
+      return await categoryService.createCategory(categoryData, token)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 export const categorySlice = createSlice({
   name: 'category',
   initialState,

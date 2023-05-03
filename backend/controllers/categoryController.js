@@ -19,7 +19,8 @@ const setCategory = asyncHandler(async (req, res) => {
       res.status(400)
       throw new Error('Name required')
     }
-  
+
+  console.log(req.body)
     const category = await Category.create({
         name: req.body.name,
         organization: req.body.organization,

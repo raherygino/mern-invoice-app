@@ -8,8 +8,20 @@ const getCategories = async (organization) => {
   return response.data
 }
 
+// Create new category
+const createCategory = async (categoryData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
+  const response = await axios.post(API_URL, categoryData)
+  return response.data
+}
 const categoryService = {
     getCategories,
+    createCategory
 }
 
 export default categoryService

@@ -11,10 +11,21 @@ import 'react-quill/dist/quill.snow.css'
 import { useState } from 'react'
 import NewSubCategoryModal from './modals/NewSubCategoryModal'
 import NewCategoryModal from './modals/NewCategoryModal'
+import { useDispatch, useSelector } from 'react-redux'
+import { getCategories } from '../../features/categories/categorySlice'
 
-const NewProduct = ({categories}) => {
+const NewProduct = ({organization}) => {
     const [modalCategory, setModalCategory] = useState(false);
     const [showModal, setShowModal] = useState(false)
+    const dispatch = useDispatch()
+
+    const { categories } = useSelector(
+      (state) => state.categories 
+    )
+
+    dispatch(getCategories())
+
+
     return(
         <div className="subheader py-4 pt-lg-0 pb-lg-10">
             <Container className="d-flex align-items-center justify-content-between flex-wrap">
@@ -38,6 +49,7 @@ const NewProduct = ({categories}) => {
                     <Button variant='danger' className='mr-3'  onClick={() => setModalCategory(true)} >New category</Button>
                     <NewCategoryModal
                         show={modalCategory}
+                        organization={organization}
                         onHide={() => setModalCategory(false)} /> 
                     
                     <Button variant='info' onClick={() => setShowModal(true)}>New sub category</Button>

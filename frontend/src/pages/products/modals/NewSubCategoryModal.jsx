@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col'
 import Input from "../../../components/form/Input"
 import Select from "../../../components/form/Select"
 
-const NewSubCategoryModal = ({show, onHide, categories}) => {
+const NewSubCategoryModal = ({show, onHide, categories, onSubmit}) => {
 
     return(
         <FormModal
@@ -12,6 +12,7 @@ const NewSubCategoryModal = ({show, onHide, categories}) => {
             size="md"
             show={show}
             title="New sub category"
+            onSubmit={onSubmit}
             onHide={onHide}>
             <Row>
                 <Col lg={6} md={6}>

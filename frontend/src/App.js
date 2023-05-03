@@ -18,7 +18,6 @@ import Products from './pages/products/Products'
 import Invoices from './pages/invoices/Invoices'
 import NewProduct from './pages/products/NewProduct'
 import NewInvoice from './pages/invoices/NewInvoice'
-import { getCategories } from './features/categories/categorySlice'
 function App() {
   
   const dispatch = useDispatch()
@@ -32,15 +31,10 @@ function App() {
     (state) => state.organization
   )
 
-  const { categories } = useSelector(
-    (state) => state.categories 
-  )
-
   useEffect(() => {
 
     dispatch(getUsers())
     dispatch(getOrganization())
-    dispatch(getCategories())
 
     return () => {
       dispatch(reset())
@@ -58,7 +52,7 @@ function App() {
           </Route>
           <Route element={<LayoutMaster userAuth={ users } organization={organization} />}>
             <Route path='/' element={<Home user={users} />} />
-            <Route path='/new-product' element={ <NewProduct categories={categories} />} />
+            <Route path='/new-product' element={ <NewProduct organization={organization._id} />} />
             <Route path='/products' element={ <Products />} />
             <Route path='/new-invoice' element={ <NewInvoice />} />
             <Route path='/invoices' element={ <Invoices />} />

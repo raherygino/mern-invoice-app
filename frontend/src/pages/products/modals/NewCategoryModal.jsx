@@ -1,7 +1,24 @@
+import { useState } from "react"
 import FormModal from "../../../components/form/FormModal"
 import Input from "../../../components/form/Input"
+import { createCategory } from "../../../features/categories/categorySlice"
+import { useDispatch } from "react-redux"
 
-const NewCategoryModal = ({show, onHide}) => {
+const NewCategoryModal = ({show, onHide, organization}) => {
+
+    const [nameCategory, setNameCategory] = useState('')
+
+    const dispatch = useDispatch()
+    
+    const onChange = (e) => {
+        setNameCategory(e.target.value)
+    }
+
+    const onSubmit = (e) => {
+        e.preventDefault()
+        dispatch(createCategory({ name: nameCategory, organization: organization }))
+        onHide(false)
+    }
 
     return(
         <FormModal
@@ -9,10 +26,12 @@ const NewCategoryModal = ({show, onHide}) => {
             size="sm"
             show={show}
             title="New category"
+            onSubmit={onSubmit}
             onHide={onHide}>
             <Input
-                id="name_sub_category"
-                label="Name"/>
+                id="name"
+                label="Name"
+                onChange={onChange}/>
         </FormModal>
     )
 }

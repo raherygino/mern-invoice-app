@@ -1,7 +1,7 @@
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 
-const FormModal = ({id, show, title, size, onHide, children}) => {
+const FormModal = ({id, show, title, size, onHide, onSubmit, children}) => {
 
     return(
         <Modal
@@ -9,6 +9,7 @@ const FormModal = ({id, show, title, size, onHide, children}) => {
             show={show}
             onHide={onHide}
             aria-labelledby={id} >
+            <form onSubmit={onSubmit}>
 
             <Modal.Header className='py-4' closeButton>
                 <Modal.Title id={id}>
@@ -22,8 +23,9 @@ const FormModal = ({id, show, title, size, onHide, children}) => {
 
             <Modal.Footer className='py-2'>
                 <Button variant='secondary' onClick={onHide}>Cancel</Button>
-                <Button variant='primary'>Ok</Button>
+                <Button variant='primary' type='submit'>Ok</Button>
             </Modal.Footer>
+            </form>
         </Modal>
     )
 }
