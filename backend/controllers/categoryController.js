@@ -2,6 +2,14 @@ const asyncHandler = require('express-async-handler')
 const Category = require('../models/categoryModel')
 const User = require('../models/userModel')
 
+// @desc    Get categories
+// @route   GET /api/categories
+// @access  Private
+const getCategories = asyncHandler(async (req, res) => {
+    const categories = await Category.find({ user: req.body.organization })
+    res.status(200).json(categories)
+})
+
 // @desc    set category
 // @route   POST /api/categories
 // @access  Private
@@ -21,5 +29,6 @@ const setCategory = asyncHandler(async (req, res) => {
 })
 
 module.exports = {
+    getCategories,
     setCategory,
 }
