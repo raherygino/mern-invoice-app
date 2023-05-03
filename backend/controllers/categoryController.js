@@ -6,7 +6,7 @@ const User = require('../models/userModel')
 // @route   GET /api/categories
 // @access  Private
 const getCategories = asyncHandler(async (req, res) => {
-    const categories = await Category.find({ user: req.body.organization })
+    const categories = await Category.find({ organization: req.params.id })
     res.status(200).json(categories)
 })
 

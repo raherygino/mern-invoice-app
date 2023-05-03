@@ -6,7 +6,7 @@ const {
 } = require('../controllers/categoryController')
 
 
-router.get('/', getCategories)
+router.get('/:id', getCategories)
 router.post('/', setCategory)
 
 module.exports = router
