@@ -1,10 +1,15 @@
 const mongoose = require('mongoose')
 
-const organizationSchema = mongoose.Schema(
+const categorySchema = mongoose.Schema(
     {
+        organization: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: 'Organization',
+        },
         name: {
             type: String,
-            require: [true, 'Add name']
+            require: [true, 'Name required']
         },
     },
     {
@@ -12,4 +17,4 @@ const organizationSchema = mongoose.Schema(
     }
 )
 
-module.exports = mongoose.model('Category', organizationSchema)
+module.exports = mongoose.model('Category', categorySchema)
