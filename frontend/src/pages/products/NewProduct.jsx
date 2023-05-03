@@ -13,18 +13,29 @@ import NewSubCategoryModal from './modals/NewSubCategoryModal'
 import NewCategoryModal from './modals/NewCategoryModal'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCategories } from '../../features/categories/categorySlice'
+import ListCategoryModal from './modals/ListCategoryModal'
+import { toast } from 'react-toastify'
 
 const NewProduct = ({organization}) => {
-    const [modalCategory, setModalCategory] = useState(false);
-    const [showModal, setShowModal] = useState(false)
-    const dispatch = useDispatch()
 
+    
+    const dispatch = useDispatch()
     const { categories } = useSelector(
       (state) => state.categories 
     )
+    
+    const [modal, setModal] = useState({
+        category: false,
+        listCategory: false,
+        subCategory: false,
+    })
+    
+    const onSuccess = () => {
+        dispatch(getCategories())
+        toast.success("Category deleted!")
+    }
 
     dispatch(getCategories())
-
 
     return(
         <div className="subheader py-4 pt-lg-0 pb-lg-10">
@@ -42,21 +53,25 @@ const NewProduct = ({organization}) => {
 				</div>
 
                 <div className="d-flex align-items-center flex-wrap py-2">
-                    <Link className='btn btn-bg-white btn-hover-text-primary btn-icon-primary mr-3' to="/products" >
-                        Liste product
-                    </Link>
-
-                    <Button variant='danger' className='mr-3'  onClick={() => setModalCategory(true)} >New category</Button>
+                    <Button variant='success' className='mr-3'  onClick={() => setModal({category: true})} >New category</Button>
                     <NewCategoryModal
-                        show={modalCategory}
+                        show={modal.category}
                         organization={organization}
-                        onHide={() => setModalCategory(false)} /> 
-                    
-                    <Button variant='info' onClick={() => setShowModal(true)}>New sub category</Button>
-                    <NewSubCategoryModal 
-                        show={showModal}
+                        onHide={() => setModal({category: false})} /> 
+
+                    <Button variant='bg-white' className='mr-3 btn-hover-text-primary' onClick={() => setModal({listCategory: true})} >List category</Button>
+                    <ListCategoryModal 
+                        show={modal.listCategory}
+                        organization={organization}
                         categories={categories}
-                        onHide={() => setShowModal(false)}/>
+                        onSuccess={onSuccess}
+                        onHide={() => setModal({listCategory: false})} />
+                    
+                    <Button variant='info' onClick={() => setModal({subCategory: true})}>New sub category</Button>
+                    <NewSubCategoryModal 
+                        show={modal.subCategory}
+                        categories={categories}
+                        onHide={() => setModal({subCategory: false})}/>
                 </div>
             </Container>
 
