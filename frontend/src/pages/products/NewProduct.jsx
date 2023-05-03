@@ -5,15 +5,16 @@ import { Link } from 'react-router-dom'
 import Input from '../../components/form/Input'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import Modal from 'react-bootstrap/Modal'
 import Select from '../../components/form/Select'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import { useState } from 'react'
+import NewSubCategoryModal from './modals/NewSubCategoryModal'
+import NewCategoryModal from './modals/NewCategoryModal'
 
 const NewProduct = ({categories}) => {
     const [modalCategory, setModalCategory] = useState(false);
-    console.log(categories)
+    const [showModal, setShowModal] = useState(false)
     return(
         <div className="subheader py-4 pt-lg-0 pb-lg-10">
             <Container className="d-flex align-items-center justify-content-between flex-wrap">
@@ -30,33 +31,20 @@ const NewProduct = ({categories}) => {
 				</div>
 
                 <div className="d-flex align-items-center flex-wrap py-2">
-                    <Link className='btn btn-bg-white btn-hover-text-primary btn-icon-primary mr-3' to="/products" >Liste product</Link>
+                    <Link className='btn btn-bg-white btn-hover-text-primary btn-icon-primary mr-3' to="/products" >
+                        Liste product
+                    </Link>
 
                     <Button variant='danger' className='mr-3'  onClick={() => setModalCategory(true)} >New category</Button>
-                    <Modal
-                        size="sm"
+                    <NewCategoryModal
                         show={modalCategory}
-                        onHide={() => setModalCategory(false)}
-                        aria-labelledby="example-modal-sizes-title-sm" >
-
-                        <Modal.Header className='py-4' closeButton>
-                            <Modal.Title id="example-modal-sizes-title-sm">
-                                New category
-                            </Modal.Title>
-                        </Modal.Header>
-
-                        <Modal.Body className='py-2'>
-                            <Input
-                                id="category_name"
-                                label="Name" />
-                        </Modal.Body>
-
-                        <Modal.Footer className='py-2'>
-                            <Button variant='secondary' onClick={() => setModalCategory(false)}>Cancel</Button>
-                            <Button variant='primary'>Ok</Button>
-                        </Modal.Footer>
-                    </Modal>
-                    <Button variant='info'>New sub category</Button>
+                        onHide={() => setModalCategory(false)} /> 
+                    
+                    <Button variant='info' onClick={() => setShowModal(true)}>New sub category</Button>
+                    <NewSubCategoryModal 
+                        show={showModal}
+                        categories={categories}
+                        onHide={() => setShowModal(false)}/>
                 </div>
             </Container>
 
