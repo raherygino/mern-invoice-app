@@ -9,7 +9,7 @@ const {
 
 
 router.get('/:id', getCategories)
-router.get('/:organization/:id', getCategory)
+router.get('/show/:organization/:id', getCategory)
 router.get('/delete/:id', deleteCategory)
 router.post('/', setCategory)
 

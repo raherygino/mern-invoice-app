@@ -10,7 +10,7 @@ const getCategories = async (organization) => {
 
 // Get category
 const getCategory = async (organization, id) => {
-  const response = await axios.get(`${API_URL}${organization}/${id}`)
+  const response = await axios.get(`show/${API_URL}${organization}/${id}`)
   return response.data
 }
 
