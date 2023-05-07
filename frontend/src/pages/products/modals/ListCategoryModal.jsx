@@ -37,11 +37,11 @@ const ListCategoryModal = ({ show, onHide, categories, onSuccess, onEdit }) => {
                     </tr>
                 </thead>
                 <tbody>
-                { categories.map((category) => (
+                { categories.map((category, index) => (
                     <tr key={category._id}>
                         <td className='pt-3'>{ category.name }</td>
                         <td width={100} align='center'>
-                            <Button variant="light" onClick={() => onEdit(category._id)} className="btn-icon btn-sm me-2">
+                            <Button variant="light" onClick={() => onEdit(index)} className="btn-icon btn-sm me-2">
 								<span className="svg-icon svg-icon-success svg-icon-md">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">

@@ -5,12 +5,12 @@ import { createCategory } from "../../../features/categories/categorySlice"
 import { useDispatch } from "react-redux"
 import Swal from "sweetalert2"
 
-const NewCategoryModal = ({show, onHide, organization}) => {
+const NewCategoryModal = ({show, onHide, organization, category}) => {
 
     const [nameCategory, setNameCategory] = useState('')
 
     const dispatch = useDispatch()
-    
+
     const onChange = (e) => {
         setNameCategory(e.target.value)
     }
@@ -28,7 +28,7 @@ const NewCategoryModal = ({show, onHide, organization}) => {
             setNameCategory('')
             Swal.fire({
                 position: 'top-center',
-                title: "",
+                title: '',
                 text: "Category name required",
                 icon: 'error'
             })
@@ -47,6 +47,7 @@ const NewCategoryModal = ({show, onHide, organization}) => {
             <Input
                 id="name"
                 label="Name"
+                value={category !== undefined ? category.name : null}
                 onChange={onChange}/>
         </FormModal>
     )

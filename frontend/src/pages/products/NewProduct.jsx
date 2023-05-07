@@ -25,18 +25,31 @@ const NewProduct = ({organization}) => {
     )
     
     const [modal, setModal] = useState({
+        categorySelected: undefined,
         category: false,
         listCategory: false,
         subCategory: false,
     })
 
-    const onEdit = (id) => {
-        console.log(id)
+    const onEdit = (index) => {
+        setModal({
+            categorySelected: categories[index],
+            listCategory: false,
+            category: true,
+        })
     }
     
     const onSuccess = () => {
         dispatch(getCategories())
         toast.success("Category deleted!")
+    }
+
+    const onHideCategory = () => {
+        setModal({category: false})
+
+        if (modal.categorySelected !== undefined) {
+            setModal({listCategory: true})
+        } 
     }
 
     dispatch(getCategories())
@@ -61,7 +74,8 @@ const NewProduct = ({organization}) => {
                     <NewCategoryModal
                         show={modal.category}
                         organization={organization}
-                        onHide={() => setModal({category: false})} /> 
+                        category={modal.categorySelected}
+                        onHide={() => onHideCategory()} /> 
 
                     <Button variant='bg-white' className='mr-3 btn-hover-text-primary' onClick={() => setModal({listCategory: true})} >List category</Button>
                     <ListCategoryModal 

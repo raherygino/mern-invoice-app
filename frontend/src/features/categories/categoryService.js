@@ -8,6 +8,12 @@ const getCategories = async (organization) => {
   return response.data
 }
 
+// Get category
+const getCategory = async (organization, id) => {
+  const response = await axios.get(`${API_URL}${organization}/${id}`)
+  return response.data
+}
+
 // Create new category
 const createCategory = async (categoryData, token) => {/*
   const config = {
@@ -21,6 +27,7 @@ const createCategory = async (categoryData, token) => {/*
 }
 const categoryService = {
     getCategories,
+    getCategory,
     createCategory
 }
 
