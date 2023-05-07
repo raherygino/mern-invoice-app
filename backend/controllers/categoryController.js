@@ -10,6 +10,23 @@ const getCategories = asyncHandler(async (req, res) => {
     res.status(200).json(categories)
 })
 
+// @desc    Get category
+// @route   GET /api/categories
+// @access  Private
+const getCategory = asyncHandler(async (req, res) => {
+    const categories = await Category.find({ 
+        organization: req.params.organization,
+        _id: req.params.id
+    })
+
+    var category = {}
+    if (categories.length > 0) {
+      category = categories[0]
+    }
+    
+    res.status(200).json(category)
+})
+
 // @desc    set category
 // @route   POST /api/categories
 // @access  Private
@@ -59,6 +76,7 @@ const deleteCategory = asyncHandler(async (req, res) => {
 
 module.exports = {
     getCategories,
+    getCategory,
     setCategory,
     deleteCategory,
 }
