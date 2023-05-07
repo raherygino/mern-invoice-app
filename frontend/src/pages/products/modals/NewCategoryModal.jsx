@@ -17,13 +17,17 @@ const NewCategoryModal = ({show, onHide, organization, category}) => {
 
     const onSubmit = (e) => {
         e.preventDefault()
-
+            
         if (nameCategory !== "") {
-            dispatch(createCategory({ 
-                name: nameCategory, 
-                organization: organization }))
-            setNameCategory('')
-            onHide(false)
+            if (category === undefined) {
+                dispatch(createCategory({ 
+                    name: nameCategory, 
+                    organization: organization }))
+                setNameCategory('')
+                onHide(false)
+            } else {
+
+            }
         } else {
             setNameCategory('')
             Swal.fire({
