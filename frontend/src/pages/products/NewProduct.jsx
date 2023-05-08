@@ -109,9 +109,9 @@ const NewProduct = ({organization}) => {
                                 <Select
                                     id="category"
                                     label="Category">
-                                        { categories.map((category) => (
+                                        { categories.organization === undefined ? categories.map((category) => (
                                             <option key={category._id}>{ category.name }</option>
-                                        )) }
+                                        )) : <option>None</option> }
                                 </Select>
                             </Col>
                             <Col lg={3} md={6}>

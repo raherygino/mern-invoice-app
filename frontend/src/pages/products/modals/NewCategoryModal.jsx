@@ -15,6 +15,7 @@ const NewCategoryModal = ({show, onHide, organization, category}) => {
         setNameCategory(e.target.value)
     }
 
+
     const onSubmit = (e) => {
         e.preventDefault()
             
@@ -51,7 +52,7 @@ const NewCategoryModal = ({show, onHide, organization, category}) => {
             <Input
                 id="name"
                 label="Name"
-                value={category !== undefined ? category.name : null}
+                value={category !== undefined ? category.name : nameCategory}
                 onChange={onChange}/>
         </FormModal>
     )

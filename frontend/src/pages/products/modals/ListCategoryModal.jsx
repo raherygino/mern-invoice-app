@@ -37,7 +37,7 @@ const ListCategoryModal = ({ show, onHide, categories, onSuccess, onEdit }) => {
                     </tr>
                 </thead>
                 <tbody>
-                { categories.map((category, index) => (
+                { categories.organization === undefined ? categories.map((category, index) => (
                     <tr key={category._id}>
                         <td className='pt-3'>{ category.name }</td>
                         <td width={100} align='center'>
@@ -75,7 +75,7 @@ const ListCategoryModal = ({ show, onHide, categories, onSuccess, onEdit }) => {
 							</Button>
                         </td>
                     </tr>
-                ))}
+                )): null}
                 </tbody>
             </Table>
         </FormModal>
