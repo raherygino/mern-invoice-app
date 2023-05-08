@@ -36,11 +36,18 @@ const NewCategoryModal = ({show, onHide, organization, category}) => {
             }
         } else {
             setNameCategory('')
+            var message = "Category name required"
+            var icon = 'error'
+
+            if (category !== undefined && nameCategory === "") {
+                message = "Nothing change"
+                icon = 'warning'
+            }
+            
             Swal.fire({
-                position: 'top-center',
                 title: '',
-                text: "Category name required",
-                icon: 'error'
+                text: message,
+                icon: icon
             })
         }
         
