@@ -27,6 +27,24 @@ const getCategory = asyncHandler(async (req, res) => {
     res.status(200).json(category)
 })
 
+// @desc    Update category
+// @route   PUT /api/category/update/:id
+// @access  Private
+const updateCategory = asyncHandler(async (req, res) => {
+  const category = await Category.findById(req.params.id)
+
+  if (!category) {
+    res.status(400)
+    throw new Error('Goal not found')
+  }
+
+  const updatedCategory = await Category.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+  })
+
+  res.status(200).json(updatedCategory)
+})
+
 // @desc    set category
 // @route   POST /api/categories
 // @access  Private
@@ -37,10 +55,7 @@ const setCategory = asyncHandler(async (req, res) => {
       throw new Error('Name required')
     }
 
-    const category = await Category.create({
-        name: req.body.name,
-        organization: req.body.organization,
-    })
+    const category = await Category.create(req.body)
   
     res.status(200).json(category)
 })
@@ -78,5 +93,6 @@ module.exports = {
     getCategories,
     getCategory,
     setCategory,
+    updateCategory,
     deleteCategory,
 }
