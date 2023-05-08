@@ -24,8 +24,9 @@ const NewSubCategoryModal = ({show, onHide, categories, onSubmit}) => {
                     <Select
                         id="category"
                         label="Category">
-                        { categories.map((category) => (
-                            <option key={category._id}>{ category.name }</option>)) 
+                        {  categories.organization === undefined ? categories.map((category) => (
+                            <option key={category._id}>{ category.name }</option>)) :
+                            <option>None</option>
                         }
                     </Select>
                 </Col>
