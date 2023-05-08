@@ -1,9 +1,10 @@
 import { useState } from "react"
 import FormModal from "../../../components/form/FormModal"
 import Input from "../../../components/form/Input"
-import { createCategory } from "../../../features/categories/categorySlice"
+import { createCategory, updateCategory } from "../../../features/categories/categorySlice"
 import { useDispatch } from "react-redux"
 import Swal from "sweetalert2"
+import { toast } from "react-toastify"
 
 const NewCategoryModal = ({show, onHide, organization, category}) => {
 
@@ -25,14 +26,19 @@ const NewCategoryModal = ({show, onHide, organization, category}) => {
         e.preventDefault()
             
         if (nameCategory !== "") {
+            const categoryData = { 
+                name: nameCategory, 
+                organization: organization }
             if (category === undefined) {
-                dispatch(createCategory({ 
-                    name: nameCategory, 
-                    organization: organization }))
+                dispatch(createCategory(categoryData))
                 setNameCategory('')
                 onHide(false)
             } else {
-
+                categoryData._id = category._id
+                dispatch(updateCategory(categoryData))
+                setNameCategory('')
+                onHide(false)
+                toast.success(`${categoryData.name} updated!`)
             }
         } else {
             setNameCategory('')

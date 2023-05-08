@@ -10,7 +10,13 @@ const getCategories = async (organization) => {
 
 // Get category
 const getCategory = async (organization, id) => {
-  const response = await axios.get(`show/${API_URL}${organization}/${id}`)
+  const response = await axios.get(`${API_URL}show/${organization}/${id}`)
+  return response.data
+}
+
+// Update category
+const updateCategory = async (categoryData) => {
+  const response = await axios.post(`${API_URL}update/${categoryData._id}`, categoryData)
   return response.data
 }
 
@@ -28,6 +34,7 @@ const createCategory = async (categoryData, token) => {/*
 const categoryService = {
     getCategories,
     getCategory,
+    updateCategory,
     createCategory
 }
 

@@ -47,6 +47,24 @@ export const getCategory = createAsyncThunk(
   }
 )
 
+// Update category
+export const updateCategory = createAsyncThunk(
+  'categories/update',
+  async (categoryData , thunkAPI) => {
+    try {
+      return await categoryService.updateCategory(categoryData)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 // Create new category
 export const createCategory = createAsyncThunk(
   'category/create',
@@ -101,6 +119,21 @@ export const categorySlice = createSlice({
         state.isError = true
         state.message = action.payload
       })
+
+      .addCase(updateCategory.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(updateCategory.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.categories = action.payload
+      })
+      .addCase(updateCategory.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+
   },
 })
 
