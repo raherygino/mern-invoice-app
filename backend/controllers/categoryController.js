@@ -28,19 +28,21 @@ const getCategory = asyncHandler(async (req, res) => {
 })
 
 // @desc    Update category
-// @route   PUT /api/category/update/:id
+// @route   PUT /api/categories/update/:id
 // @access  Private
 const updateCategory = asyncHandler(async (req, res) => {
   const category = await Category.findById(req.params.id)
 
   if (!category) {
     res.status(400)
-    throw new Error('Goal not found')
+    throw new Error('Category not found')
   }
 
   const updatedCategory = await Category.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
   })
+
+  console.log(res.body)
 
   res.status(200).json(updatedCategory)
 })
