@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node backend/server.js",
+    "build": "webpack --config webpack.config.js",
     "server": "nodemon backend/server.js",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
