@@ -23,6 +23,8 @@ const NewProduct = ({organization}) => {
     const { categories } = useSelector(
       (state) => state.categories 
     )
+
+   // console.log(organization)
     
     const [modal, setModal] = useState({
         categorySelected: undefined,
@@ -90,6 +92,7 @@ const NewProduct = ({organization}) => {
                     <NewSubCategoryModal 
                         show={modal.subCategory}
                         categories={categories}
+                        organization={organization}
                         onHide={() => setModal({subCategory: false})}/>
                 </div>
             </Container>
