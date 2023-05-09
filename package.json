@@ -1,11 +1,14 @@
 {
   "name": "invoice-app",
   "version": "1.0.0",
+  "homepage": "https://raherygino.github.io/api-mern",
   "description": "Invoice app with MongoDB, Express, React & Node",
   "main": "index.js",
   "scripts": {
     "start": "node backend/server.js",
     "server": "nodemon backend/server.js",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
