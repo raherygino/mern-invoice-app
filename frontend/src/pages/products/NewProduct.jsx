@@ -31,6 +31,7 @@ const NewProduct = ({organization}) => {
         category: false,
         listCategory: false,
         subCategory: false,
+        error: '',
     })
 
     const onEdit = (index) => {
@@ -70,6 +71,9 @@ const NewProduct = ({organization}) => {
 						</li>
 					</ul>
 				</div>
+                
+            
+            { categories.message ?  <p className='badge bg-danger'> { categories.message } </p>: null}
 
                 <div className="d-flex align-items-center flex-wrap py-2">
                     <Button variant='success' className='mr-3'  onClick={() => setModal({category: true})} >New category</Button>
@@ -112,7 +116,7 @@ const NewProduct = ({organization}) => {
                                 <Select
                                     id="category"
                                     label="Category">
-                                        { categories.organization === undefined ? categories.map((category) => (
+                                        { categories.organization === undefined && categories.message === undefined ? categories.map((category) => (
                                             <option key={category._id}>{ category.name }</option>
                                         )) : <option>None</option> }
                                 </Select>

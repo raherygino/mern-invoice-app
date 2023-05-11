@@ -45,8 +45,6 @@ const setSubCategory = asyncHandler(async (req, res) => {
       throw new Error('Name required')
     }
 
-    console.log(req.body)
-
     const subCategory = await SubCategory.create(req.body)
   
     res.status(200).json(subCategory)

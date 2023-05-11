@@ -29,7 +29,14 @@ const NewSubCategoryModal = ({show, onHide, categories, organization}) => {
     const onSubmit = (e) => {
         e.preventDefault()
 
-        if (dataSubCategory.category !== "" && dataSubCategory.name !== "") {
+        console.log(dataSubCategory)
+        
+        if (dataSubCategory.category === "") {
+            toast.error('Choose category')
+
+        } else if (dataSubCategory.name === "") {
+            toast.error('Name invalide')
+        } else {
             dispatch(createSubCategory(dataSubCategory))
             toast.success(`${dataSubCategory.name} created!`)
             
@@ -39,9 +46,8 @@ const NewSubCategoryModal = ({show, onHide, categories, organization}) => {
                 organization: ''
             })
             onHide()
-        } else {
-            toast.error('Field required')
         }
+
     }
 
     return(
@@ -65,7 +71,7 @@ const NewSubCategoryModal = ({show, onHide, categories, organization}) => {
                         label="Category"
                         onChange={onChange}>
                         <option value="">Choose</option>
-                        {  categories.organization === undefined ? categories.map((category) => (
+                        { categories.message === undefined &&  categories.organization === undefined ? categories.map((category) => (
                             <option key={category._id} value={category._id}>{ category.name }</option>)) :
                             <option value={null}>None</option>
                         }
