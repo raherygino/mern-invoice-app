@@ -15,17 +15,20 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getCategories } from '../../features/categories/categorySlice'
 import ListCategoryModal from './modals/ListCategoryModal'
 import { toast } from 'react-toastify'
+import { getSubCategories } from '../../features/sub-categories/subCategorySlice'
 
 const NewProduct = ({organization}) => {
 
     
     const dispatch = useDispatch()
     const { categories } = useSelector(
-      (state) => state.categories 
+      (state) => state.categories
     )
 
-   // console.log(organization)
-    
+    const { subCategories, message, isLoadingCreating } = useSelector(
+        (state) =>  state.subCategories
+    )
+
     const [modal, setModal] = useState({
         categorySelected: undefined,
         category: false,
@@ -56,6 +59,7 @@ const NewProduct = ({organization}) => {
     }
 
     dispatch(getCategories())
+    dispatch(getSubCategories())
 
     return(
         <div className="subheader py-4 pt-lg-0 pb-lg-10">
@@ -71,8 +75,7 @@ const NewProduct = ({organization}) => {
 						</li>
 					</ul>
 				</div>
-                
-            
+
             { categories.message ?  <p className='badge bg-danger'> { categories.message } </p>: null}
 
                 <div className="d-flex align-items-center flex-wrap py-2">
@@ -97,6 +100,8 @@ const NewProduct = ({organization}) => {
                         show={modal.subCategory}
                         categories={categories}
                         organization={organization}
+                        message={message}
+                        isLoading={isLoadingCreating}
                         onHide={() => setModal({subCategory: false})}/>
                 </div>
             </Container>
@@ -125,7 +130,10 @@ const NewProduct = ({organization}) => {
                                 <Select
                                     id="sub_category"
                                     label="Sub category">
-                                    <option>Value</option>
+                                    <option>Select</option>
+                                    { subCategories.message === undefined ? subCategories.map((subCategory) => (
+                                        <option key={subCategory._id}> { subCategory.name } </option>
+                                    )): null }
                                 </Select>
                             </Col>
                             <Col lg={3} md={6}>

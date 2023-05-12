@@ -3,8 +3,10 @@ import subCategoryService from './subCategoryService'
 
 const initialState = {
   subCategories: [],
+  subCategory: {},
   isError: false,
   isSuccess: false,
+  isLoadingCreating: false,
   isLoading: false,
   message: '',
 }
@@ -92,15 +94,15 @@ export const subCategorySlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(createSubCategory.pending, (state) => {
-        state.isLoading = true
+        state.isLoadingCreating = true
       })
       .addCase(createSubCategory.fulfilled, (state, action) => {
-        state.isLoading = false
+        state.isLoadingCreating = false
         state.isSuccess = true
-        state.subCategories = action.payload
+        state.subCategory = action.payload
       })
       .addCase(createSubCategory.rejected, (state, action) => {
-        state.isLoading = false
+        state.isLoadingCreating = false
         state.isError = true
         state.message = action.payload
       })

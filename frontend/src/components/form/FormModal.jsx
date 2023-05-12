@@ -1,7 +1,7 @@
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 
-const FormModal = ({id, show, title, size, onHide, disabledBtnCancel, onSubmit, children}) => {
+const FormModal = ({id, show, title, size, onHide, disabledBtnCancel, onSubmit, children, enableBtnOk}) => {
 
     return(
         <Modal
@@ -24,7 +24,7 @@ const FormModal = ({id, show, title, size, onHide, disabledBtnCancel, onSubmit, 
             <Modal.Footer className='py-2'>
                 { disabledBtnCancel ?? 
                 <Button variant='secondary' onClick={onHide}>Cancel</Button> }
-                <Button variant='primary' type='submit'>Ok</Button>
+                <Button variant='primary' disabled={enableBtnOk} type='submit'>Ok</Button>
             </Modal.Footer>
             </form>
         </Modal>
