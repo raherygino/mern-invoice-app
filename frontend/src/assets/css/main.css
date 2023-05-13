@@ -18,6 +18,27 @@
     background-color: #ffffff10;
     border: solid 1px #ffffff22;
 }
+
+.btn {
+    border-radius: 4px;
+}
+
+/** MARGIN **/
+
+.mt-0-5 {
+    margin-top: 1px;
+}
+
+/**  MODAL  **/
+.modal-content {
+    border-radius: 4px;
+}
+
+/** SWAL **/
+.swal2-popup {
+    border-radius: 4px !important;
+}
+
 /*
 body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown),html.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown){overflow-y:initial!important}
 body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown):not(.sweetalert2-nopadding),
