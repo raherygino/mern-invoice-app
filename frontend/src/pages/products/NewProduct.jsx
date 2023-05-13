@@ -19,6 +19,7 @@ import { toast } from 'react-toastify'
 import { getSubCategories } from '../../features/sub-categories/subCategorySlice'
 import ListSubCategoryModal from './modals/ListSubCategoryModal'
 import Svg from '../../components/icons/Svg'
+import Menu from '../../menu'
 
 const NewProduct = ({organization}) => {
 
@@ -40,33 +41,6 @@ const NewProduct = ({organization}) => {
         listSubCategory: false,
         error: '',
     })
-
-    const categoryMenu = [
-        {
-            title: "New category",
-            icon: "list-check",
-            variant: "primary",
-            modal: {category: true}
-        },
-        {
-            title: "List category",
-            icon: "list",
-            variant: "warning",
-            modal: {listCategory: true}
-        },
-        {
-            title: "New sub category",
-            icon: "edit",
-            variant: "danger",
-            modal: {subCategory: true}
-        },
-        {
-            title: "List sub category",
-            icon: "list",
-            variant: "success",
-            modal: {listSubCategory: true}
-        },
-    ]
 
     const onEdit = (index) => {
         setModal({
@@ -124,7 +98,7 @@ const NewProduct = ({organization}) => {
                             Manage category product
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
-                            { categoryMenu.map((item) => (
+                            { Menu.category.map((item) => (
                                 <Dropdown.Item href="#" key={item.title} onClick={() => setModal(item.modal)}>
                                     <Svg name={item.icon} variant={item.variant}/>
                                     <span className="navi-text ms-2 mt-0-5">{item.title}</span>
