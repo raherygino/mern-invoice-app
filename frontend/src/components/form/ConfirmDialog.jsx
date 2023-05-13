@@ -3,7 +3,6 @@ import Swal from "sweetalert2"
 const ConfirmDialog = ({ title, text, link, onSuccess }) => {
 
     Swal.fire({
-        position: 'top-center',
         title: title,
         text: text,
         icon: 'warning',

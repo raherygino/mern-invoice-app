@@ -6,7 +6,11 @@ import ConfirmDialog from '../../../components/form/ConfirmDialog';
 const ListSubCategoryModal = ({ show, onHide, subCategories, categories, onSuccess, onEdit }) => {
     
     const getCurrentCategory = (id) => {
-        return categories.find((cat) => cat._id === id)
+        if (categories.length !== 0) {
+            return categories.find((cat) => cat._id === id)
+        } else {
+            return { _id: id , name: id }
+        }
     }
 
     const onDelete = (id) => {
@@ -45,7 +49,11 @@ const ListSubCategoryModal = ({ show, onHide, subCategories, categories, onSucce
                 { subCategories.message === undefined && subCategories.organization === undefined ? subCategories.map((subCategory, index) => (
                     <tr key={subCategory._id}>
                         <td className='pt-3'>{ subCategory.name }</td>
-                        <td className='pt-3'>{ getCurrentCategory(subCategory.category).name }</td>
+                        <td className='pt-3'>
+                            { getCurrentCategory(subCategory.category) !== undefined ? getCurrentCategory(subCategory.category).name : 
+                                <span className='text-danger bg-light-danger badge'>Category deleted</span>
+                            }
+                        </td>
                         <td width={100} align='center'>
                             <Button variant="light" onClick={() => onEdit(index)} className="btn-icon btn-sm me-2">
 								<span className="svg-icon svg-icon-success svg-icon-md">

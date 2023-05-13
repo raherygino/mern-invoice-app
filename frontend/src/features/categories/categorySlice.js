@@ -7,6 +7,11 @@ const initialState = {
   isError: false,
   isSuccess: false,
   isLoading: false,
+  stateCreate: {
+    isError: false,
+    isSuccess: false,
+    isLoading: false,
+  },
   message: '',
 }
 
@@ -94,17 +99,22 @@ export const categorySlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(createCategory.pending, (state) => {
-        state.isLoading = true
+        state.stateCreate.isLoading = true
       })
-      .addCase(createCategory.fulfilled, (state, action) => {
+      .addCase(createCategory.fulfilled, (state, action) => {/*
         state.isLoading = false
-        state.isSuccess = true
+        state.isSuccess = true*/
         state.categories = action.payload
+        state.stateCreate.isLoading = false
+        state.stateCreate.isSuccess = true
       })
-      .addCase(createCategory.rejected, (state, action) => {
+      .addCase(createCategory.rejected, (state, action) => {/*
         state.isLoading = false
         state.isError = true
-        state.message = action.payload
+        state.message = action.payload*/
+        state.stateCreate.isLoading = false
+        state.stateCreate.isError = true
+        state.stateCreate.category = action.payload
       })
 
       .addCase(getCategory.pending, (state) => {

@@ -1,16 +1,29 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import FormModal from "../../../components/form/FormModal"
 import Input from "../../../components/form/Input"
-import { createCategory, updateCategory } from "../../../features/categories/categorySlice"
+import { createCategory, getCategories, reset, updateCategory } from "../../../features/categories/categorySlice"
 import { useDispatch } from "react-redux"
 import Swal from "sweetalert2"
 import { toast } from "react-toastify"
 
-const NewCategoryModal = ({show, onHide, organization, category}) => {
+const NewCategoryModal = ({show, onHide, organization, category, state}) => {
 
     const [nameCategory, setNameCategory] = useState('')
 
     const dispatch = useDispatch()
+
+    useEffect(() => {
+
+        if (state.isSuccess) {
+            toast.success("Created !")
+        }
+
+        return () => {
+            dispatch(reset())
+            dispatch(getCategories())
+        }
+
+    },  [state, dispatch])
 
     const onChange = (e) => {
         setNameCategory(e.target.value)
@@ -32,12 +45,12 @@ const NewCategoryModal = ({show, onHide, organization, category}) => {
             if (category === undefined) {
                 dispatch(createCategory(categoryData))
                 setNameCategory('')
-                onHide(false)
+                //onHide(false)
             } else {
                 categoryData._id = category._id
                 dispatch(updateCategory(categoryData))
                 setNameCategory('')
-                onHide(false)
+             //   onHide(false)
                 toast.success(`${categoryData.name} updated!`)
             }
         } else {
@@ -66,7 +79,8 @@ const NewCategoryModal = ({show, onHide, organization, category}) => {
             show={show}
             title="New category"
             onSubmit={onSubmit}
-            onHide={onHideEvent}>
+            onHide={onHideEvent}
+            enableBtnOk={state.isLoading}>
             <Input
                 id="name"
                 label="Name"
