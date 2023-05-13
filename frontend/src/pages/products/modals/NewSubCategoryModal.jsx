@@ -3,12 +3,12 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Input from "../../../components/form/Input"
 import Select from "../../../components/form/Select"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
-import { createSubCategory } from "../../../features/sub-categories/subCategorySlice"
+import { createSubCategory, reset } from "../../../features/sub-categories/subCategorySlice"
 import { toast } from "react-toastify"
 
-const NewSubCategoryModal = ({show, onHide, categories, organization, message, isLoading}) => {
+const NewSubCategoryModal = ({show, onHide, categories, organization, message, isLoading, isSuccess, isError}) => {
 
     const [dataSubCategory, setDataSubCategory] = useState({
         category: '',
@@ -17,6 +17,29 @@ const NewSubCategoryModal = ({show, onHide, categories, organization, message, i
     })
 
     const dispatch = useDispatch()
+
+
+    useEffect(() => {
+
+        if (isError != null) {
+            if (isError) {
+                toast.error(message)
+            } else {
+                if (isSuccess) {
+                    setDataSubCategory({
+                        name: '',
+                        category: '',
+                        organization: ''
+                    })
+                    toast.success(`Subcategory created`)
+                }
+            }
+        }
+        
+        return () => {
+            dispatch(reset())
+        }
+    }, [isError, isSuccess, dispatch, message])
     
     const onChange = (e) => {
         setDataSubCategory((prevState) => ({
@@ -36,19 +59,6 @@ const NewSubCategoryModal = ({show, onHide, categories, organization, message, i
 
         } else {
             dispatch(createSubCategory(dataSubCategory))
-
-            if (message !== "") {
-                toast.error(message);
-            } else {
-                toast.success(`${dataSubCategory.name} created !`);
-
-                setDataSubCategory({
-                    name: '',
-                    category: '',
-                    organization: ''
-                })
-                onHide()
-            }
         }
     }
 

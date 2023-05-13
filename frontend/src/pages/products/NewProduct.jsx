@@ -1,6 +1,7 @@
 import Container from 'react-bootstrap/Container'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
+import Dropdown from 'react-bootstrap/Dropdown'
 import { Link } from 'react-router-dom'
 import Input from '../../components/form/Input'
 import Row from 'react-bootstrap/Row'
@@ -16,6 +17,8 @@ import { getCategories } from '../../features/categories/categorySlice'
 import ListCategoryModal from './modals/ListCategoryModal'
 import { toast } from 'react-toastify'
 import { getSubCategories } from '../../features/sub-categories/subCategorySlice'
+import ListSubCategoryModal from './modals/ListSubCategoryModal'
+import Svg from '../../components/icons/Svg'
 
 const NewProduct = ({organization}) => {
 
@@ -25,7 +28,7 @@ const NewProduct = ({organization}) => {
       (state) => state.categories
     )
 
-    const { subCategories, message, isLoadingCreating } = useSelector(
+    const { subCategories, isCreated, message, isLoadingCreating, isErrorCreated } = useSelector(
         (state) =>  state.subCategories
     )
 
@@ -34,8 +37,36 @@ const NewProduct = ({organization}) => {
         category: false,
         listCategory: false,
         subCategory: false,
+        listSubCategory: false,
         error: '',
     })
+
+    const categoryMenu = [
+        {
+            title: "New category",
+            icon: "list-check",
+            variant: "primary",
+            modal: {category: true}
+        },
+        {
+            title: "List category",
+            icon: "list",
+            variant: "warning",
+            modal: {listCategory: true}
+        },
+        {
+            title: "New sub category",
+            icon: "edit",
+            variant: "danger",
+            modal: {subCategory: true}
+        },
+        {
+            title: "List sub category",
+            icon: "list",
+            variant: "success",
+            modal: {listSubCategory: true}
+        },
+    ]
 
     const onEdit = (index) => {
         setModal({
@@ -77,16 +108,28 @@ const NewProduct = ({organization}) => {
 				</div>
 
             { categories.message ?  <p className='badge bg-danger'> { categories.message } </p>: null}
-
+            
                 <div className="d-flex align-items-center flex-wrap py-2">
-                    <Button variant='success' className='mr-3'  onClick={() => setModal({category: true})} >New category</Button>
+                    <Dropdown className="d-inline mx-2">
+                        <Dropdown.Toggle className='btn-shadow font-weight-bold ' id="dropdown-autoclose-true">
+                            Manage category product
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu>
+                            { categoryMenu.map((item) => (
+                                <Dropdown.Item href="#" onClick={() => setModal(item.modal)}>
+                                    <Svg name={item.icon} variant={item.variant}/>
+                                    <span className="navi-text ms-2 mt-0-5">{item.title}</span>
+                                </Dropdown.Item> )) 
+                            }
+                        </Dropdown.Menu>
+                    </Dropdown>
+
                     <NewCategoryModal
                         show={modal.category}
                         organization={organization}
                         category={modal.categorySelected}
                         onHide={() => onHideCategory()} /> 
 
-                    <Button variant='bg-white' className='mr-3 btn-hover-text-primary' onClick={() => setModal({listCategory: true})} >List category</Button>
                     <ListCategoryModal 
                         show={modal.listCategory}
                         organization={organization}
@@ -94,15 +137,25 @@ const NewProduct = ({organization}) => {
                         onSuccess={onSuccess}
                         onEdit={onEdit}
                         onHide={() => setModal({listCategory: false})} />
-                    
-                    <Button variant='info' onClick={() => setModal({subCategory: true})}>New sub category</Button>
+
                     <NewSubCategoryModal 
                         show={modal.subCategory}
                         categories={categories}
                         organization={organization}
                         message={message}
+                        isSuccess={isCreated}
                         isLoading={isLoadingCreating}
+                        isError={isErrorCreated}
                         onHide={() => setModal({subCategory: false})}/>
+                        
+                    <ListSubCategoryModal 
+                        show={modal.listSubCategory}
+                        organization={organization}
+                        subCategories={subCategories}
+                        categories={categories}
+                        onSuccess={onSuccess}
+                        onEdit={onEdit}
+                        onHide={() => setModal({listCategory: false})} />
                 </div>
             </Container>
 
