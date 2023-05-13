@@ -7,6 +7,8 @@ const initialState = {
   isError: false,
   isSuccess: false,
   isLoadingCreating: false,
+  isCreated: false,
+  isErrorCreated: false,
   isLoading: false,
   message: '',
 }
@@ -95,15 +97,28 @@ export const subCategorySlice = createSlice({
     builder
       .addCase(createSubCategory.pending, (state) => {
         state.isLoadingCreating = true
+        state.isCreated = false
+        state.isErrorCreated = null
       })
       .addCase(createSubCategory.fulfilled, (state, action) => {
         state.isLoadingCreating = false
         state.isSuccess = true
-        state.subCategory = action.payload
+        if (action.payload.message !== undefined) {
+          state.isCreated = false
+          state.subCategory = {}
+          state.isErrorCreated = true
+          state.message = action.payload.message
+        } else {
+          state.isCreated = true
+          state.subCategory = action.payload
+          state.isErrorCreated = false
+        }
       })
       .addCase(createSubCategory.rejected, (state, action) => {
         state.isLoadingCreating = false
         state.isError = true
+        state.isErrorCreated = true
+        state.isCreated = false
         state.message = action.payload
       })
 

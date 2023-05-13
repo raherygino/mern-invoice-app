@@ -3,6 +3,7 @@ import categoryService from './categoryService'
 
 const initialState = {
   categories: [],
+  category: {},
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -30,11 +31,11 @@ export const getCategories = createAsyncThunk(
 
 // Get category
 export const getCategory = createAsyncThunk(
-  'categories/',
-  async (_, thunkAPI) => {
+  'category/',
+  async (id, thunkAPI) => {
     try {
       const organization = thunkAPI.getState().auth.user.organization
-      return await categoryService.getCategory(organization, "")
+      return await categoryService.getCategory(organization, id)
     } catch (error) {
       const message =
         (error.response &&
@@ -101,6 +102,20 @@ export const categorySlice = createSlice({
         state.categories = action.payload
       })
       .addCase(createCategory.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+
+      .addCase(getCategory.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(getCategory.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.category = action.payload
+      })
+      .addCase(getCategory.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload
