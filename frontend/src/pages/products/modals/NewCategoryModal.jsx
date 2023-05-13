@@ -18,6 +18,10 @@ const NewCategoryModal = ({show, onHide, organization, category, state}) => {
             toast.success("Created !")
         }
 
+        if (state.isError) {
+            toast.error("Error !")
+        }
+
         return () => {
             dispatch(reset())
             dispatch(getCategories())
