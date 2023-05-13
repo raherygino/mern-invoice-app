@@ -10,7 +10,7 @@
     border: solid 1px #ffffff00;
 }
 
-.nav-link:hover{
+.nav-link:hover, .btn-user:hover{
     background-color: #ffffff22;
 }
 
@@ -19,8 +19,8 @@
     border: solid 1px #ffffff22;
 }
 
-.btn {
-    border-radius: 4px;
+.btn, .symbol {
+    border-radius: 4px !important;
 }
 
 /** MARGIN **/
