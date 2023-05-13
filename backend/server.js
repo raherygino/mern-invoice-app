@@ -25,7 +25,6 @@ app.use('/api/organizations', require('./routes/organizationRoutes'));
 app.use('/api/categories', require('./routes/categoryRoutes'))
 app.use('/api/subcategories', require('./routes/subCategoryRoutes'))
 
-
 // Serve frontend
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../frontend/build')));
