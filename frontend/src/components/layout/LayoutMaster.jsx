@@ -2,10 +2,13 @@ import Container from 'react-bootstrap/Container'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
+import Dropdown from 'react-bootstrap/Dropdown'
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout, reset } from '../../features/auth/authSlice'
 import { useEffect } from 'react'
+import Svg from '../icons/Svg'
+import Menu from '../../menu'
 
 const LayoutMaster = ({organization, userAuth}) => {
 
@@ -62,12 +65,33 @@ const LayoutMaster = ({organization, userAuth}) => {
                         </Nav>
                     
                         <Nav>
-                            <NavDropdown title={ `${userAuth.lastname} ${userAuth.firstname}` } id="basic-nav-dropdown">
-                                <NavDropdown.Item href="#">Profile</NavDropdown.Item>
-                                <NavDropdown.Item href="#">Settings</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item onClick={onLogout}>Logout</NavDropdown.Item>
-                            </NavDropdown>
+                            <Dropdown className="d-inline mx-2">
+                                <Dropdown.Toggle id="dropdown-autoclose-true" className="btn-dark w-auto btn-user d-inline-flex align-items-center">
+                                    <span className="symbol symbol-35 symbol-light-danger">
+                                        <span className="symbol-label font-size-h5 font-weight-bold">
+                                            { userAuth.lastname !== undefined ? userAuth.lastname.charAt(0) : 'A'}
+                                        </span>
+                                    </span>
+                                    <span className="text-dark-50 font-weight-bolder font-size-base ml-3">
+                                        { `${userAuth.lastname} ${userAuth.firstname}` }
+                                    </span>
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu className='ml-4'>
+                                    { Menu.user.map((item) => (
+                                        <Link to={item.to} data-rr-ui-dropdown-item className='dropdown-item'>
+                                            <Svg name={ item.icon } variant={ item.variant } />
+                                            <span className="navi-text ms-2 mt-0-5">{ item.title }</span>
+                                        </Link>
+                                    )) }
+                                    
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item onClick={onLogout}>
+                                        <Svg name="logout" variant="danger" />
+                                        <span className="navi-text ms-2 mt-0-5">Logout</span>
+                                    </NavDropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
