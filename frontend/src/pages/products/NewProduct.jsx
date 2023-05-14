@@ -9,7 +9,7 @@ import Col from 'react-bootstrap/Col'
 import Select from '../../components/form/Select'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import NewSubCategoryModal from './modals/NewSubCategoryModal'
 import NewCategoryModal from './modals/NewCategoryModal'
 import { useDispatch, useSelector } from 'react-redux'
@@ -41,6 +41,13 @@ const NewProduct = ({organization}) => {
         listSubCategory: false,
         error: '',
     })
+
+    useEffect(() => {
+        if (stateCreate.isSuccess) {
+            setModal({category: false})
+            setModal({listCategory: true})
+        }
+    }, [setModal, stateCreate])
 
     const onEdit = (index) => {
         setModal({
