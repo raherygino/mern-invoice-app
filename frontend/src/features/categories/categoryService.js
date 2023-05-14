@@ -21,14 +21,14 @@ const updateCategory = async (categoryData) => {
 }
 
 // Create new category
-const createCategory = async (categoryData, token) => {/*
+const createCategory = async (categoryData, token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  }*/
+  }
 
-  const response = await axios.post(API_URL, categoryData)
+  const response = await axios.post(API_URL, categoryData, config)
   return response.data
 }
 const categoryService = {

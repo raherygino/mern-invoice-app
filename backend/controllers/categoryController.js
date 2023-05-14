@@ -42,8 +42,6 @@ const updateCategory = asyncHandler(async (req, res) => {
     new: true,
   })
 
-  console.log(res.body)
-
   res.status(200).json(updatedCategory)
 })
 

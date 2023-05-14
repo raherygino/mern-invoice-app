@@ -77,7 +77,7 @@ const NewCategoryModal = ({show, onHide, organization, category, state}) => {
             id="modal-sub-category"
             size="sm"
             show={show}
-            title="New category"
+            title={category !== undefined ? `Edit "${category.name}"` : "New category"}
             onSubmit={onSubmit}
             onHide={onHideEvent}
             enableBtnOk={state.isLoading}>
