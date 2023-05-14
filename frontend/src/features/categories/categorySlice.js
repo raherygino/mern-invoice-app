@@ -11,6 +11,7 @@ const initialState = {
     isError: false,
     isSuccess: false,
     isLoading: false,
+    message: '',
   },
   message: '',
 }
@@ -101,20 +102,16 @@ export const categorySlice = createSlice({
       .addCase(createCategory.pending, (state) => {
         state.stateCreate.isLoading = true
       })
-      .addCase(createCategory.fulfilled, (state, action) => {/*
-        state.isLoading = false
-        state.isSuccess = true*/
+      .addCase(createCategory.fulfilled, (state, action) => {
         state.categories = action.payload
         state.stateCreate.isLoading = false
         state.stateCreate.isSuccess = true
+        state.stateCreate.message = 'Category created!'
       })
-      .addCase(createCategory.rejected, (state, action) => {/*
-        state.isLoading = false
-        state.isError = true
-        state.message = action.payload*/
+      .addCase(createCategory.rejected, (state, action) => {
         state.stateCreate.isLoading = false
         state.stateCreate.isError = true
-        state.stateCreate.category = action.payload
+        state.stateCreate.message = action.payload
       })
 
       .addCase(getCategory.pending, (state) => {
@@ -146,17 +143,18 @@ export const categorySlice = createSlice({
       })
 
       .addCase(updateCategory.pending, (state) => {
-        state.isLoading = true
+        state.stateCreate.isLoading = true
       })
       .addCase(updateCategory.fulfilled, (state, action) => {
-        state.isLoading = false
-        state.isSuccess = true
-        state.categories = action.payload
+        state.stateCreate.isLoading = false
+        state.stateCreate.isSuccess = true
+        state.stateCreate.categories = action.payload
+        state.stateCreate.message = 'Category updated!'
       })
       .addCase(updateCategory.rejected, (state, action) => {
-        state.isLoading = false
-        state.isError = true
-        state.message = action.payload
+        state.stateCreate.isLoading = false
+        state.stateCreate.isError = true
+        state.stateCreate.message = action.payload
       })
 
   },

@@ -15,11 +15,12 @@ const NewCategoryModal = ({show, onHide, organization, category, state}) => {
     useEffect(() => {
 
         if (state.isSuccess) {
-            toast.success("Created !")
+            toast.success(state.message)
+            setNameCategory('')
         }
 
         if (state.isError) {
-            toast.error("Error !")
+            toast.error(state.message)
         }
 
         return () => {
@@ -48,14 +49,9 @@ const NewCategoryModal = ({show, onHide, organization, category, state}) => {
                 organization: organization }
             if (category === undefined) {
                 dispatch(createCategory(categoryData))
-                setNameCategory('')
-                //onHide(false)
             } else {
                 categoryData._id = category._id
                 dispatch(updateCategory(categoryData))
-                setNameCategory('')
-             //   onHide(false)
-                toast.success(`${categoryData.name} updated!`)
             }
         } else {
             setNameCategory('')
