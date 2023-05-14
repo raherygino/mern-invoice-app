@@ -20,20 +20,18 @@ const NewSubCategoryModal = ({show, onHide, categories, organization, message, i
 
 
     useEffect(() => {
-
-        if (isError != null) {
-            if (isError) {
-                toast.error(message)
-            } else {
-                if (isSuccess) {
-                    setDataSubCategory({
-                        name: '',
-                        category: '',
-                        organization: ''
-                    })
-                    toast.success(`Subcategory created`)
-                }
-            }
+        
+        if (isSuccess) {
+            setDataSubCategory({
+                name: '',
+                category: '',
+                organization: ''
+            })
+            toast.success(`Subcategory created`)
+        }
+        
+        if (isError) {
+            toast.error(message)
         }
         
         return () => {

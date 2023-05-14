@@ -6,10 +6,13 @@ const initialState = {
   subCategory: {},
   isError: false,
   isSuccess: false,
-  isLoadingCreating: false,
-  isCreated: false,
-  isErrorCreated: false,
   isLoading: false,
+  subCategoryCreate: {
+    isError: false,
+    isSuccess: false,
+    isLoading: false,
+    message: '',
+  },
   message: '',
 }
 
@@ -96,30 +99,17 @@ export const subCategorySlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(createSubCategory.pending, (state) => {
-        state.isLoadingCreating = true
-        state.isCreated = false
-        state.isErrorCreated = null
+        state.subCategoryCreate.isLoading = true
       })
       .addCase(createSubCategory.fulfilled, (state, action) => {
-        state.isLoadingCreating = false
-        state.isSuccess = true
-        if (action.payload.message !== undefined) {
-          state.isCreated = false
-          state.subCategory = {}
-          state.isErrorCreated = true
-          state.message = action.payload.message
-        } else {
-          state.isCreated = true
-          state.subCategory = action.payload
-          state.isErrorCreated = false
-        }
+        state.subCategoryCreate.isLoading = false
+        state.subCategoryCreate.isSuccess = true
+        state.subCategoryCreate.message = 'Sub category created!'
       })
       .addCase(createSubCategory.rejected, (state, action) => {
-        state.isLoadingCreating = false
-        state.isError = true
-        state.isErrorCreated = true
-        state.isCreated = false
-        state.message = action.payload
+        state.subCategoryCreate.isLoading = false
+        state.subCategoryCreate.isError = true
+        state.subCategoryCreate.message = action.payload
       })
 
       .addCase(getSubCategories.pending, (state) => {

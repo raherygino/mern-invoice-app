@@ -29,7 +29,7 @@ const NewProduct = ({organization}) => {
       (state) => state.categories
     )
 
-    const { subCategories, isCreated, message, isLoadingCreating, isErrorCreated } = useSelector(
+    const { subCategories, subCategoryCreate } = useSelector(
         (state) =>  state.subCategories
     )
 
@@ -47,7 +47,13 @@ const NewProduct = ({organization}) => {
             setModal({category: false})
             setModal({listCategory: true})
         }
-    }, [setModal, stateCreate])
+
+        if (subCategoryCreate.isSuccess) {
+            setModal({subCategory: false})
+            setModal({listSubCategory: true})
+        }
+
+    }, [setModal, stateCreate, subCategoryCreate])
 
     const onEdit = (index) => {
         setModal({
@@ -133,10 +139,10 @@ const NewProduct = ({organization}) => {
                         show={modal.subCategory}
                         categories={categories}
                         organization={organization}
-                        message={message}
-                        isSuccess={isCreated}
-                        isLoading={isLoadingCreating}
-                        isError={isErrorCreated}
+                        message={subCategoryCreate.message}
+                        isSuccess={subCategoryCreate.isSuccess}
+                        isLoading={subCategoryCreate.isLoading}
+                        isError={subCategoryCreate.isError}
                         onHide={() => setModal({subCategory: false})}/>
                         
                     <ListSubCategoryModal 
