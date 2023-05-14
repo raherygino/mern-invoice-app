@@ -11,14 +11,21 @@ const setConfig = (token) => {
   return config
 }
 
-// Create new subcategory
+// Create new product
 const createProduct = async (productData, token) => {
   const response = await axios.post(API_URL, productData, setConfig(token))
   return response.data
 }
 
+// Get products
+const getProducts = async (organization) => {
+  const response = await axios.get(`${API_URL}get/${organization}`)
+  return response.data
+}
+
 const productService = {
     createProduct,
+    getProducts,
 }
 
 export default productService

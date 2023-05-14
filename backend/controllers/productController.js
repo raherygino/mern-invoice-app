@@ -13,14 +13,32 @@ const setProduct = asyncHandler(async (req, res) => {
 })
 
 // @desc    Get categories
-// @route   GET /api/products/:organization
+// @route   GET /api/products/get/:organization
 // @access  Private
 const getProducts = asyncHandler(async (req, res) => {
     const products = await Product.find({ organization: req.params.organization })
     res.status(200).json(products)
 })
 
+
+// @desc    Delete products
+// @route   DELETE /api/products/delete/:id
+// @access  Private
+const deleteProduct = asyncHandler(async (req, res) => {
+
+    const product = await Product.findById(req.params.id)
+
+    if (!product) {
+      res.status(400)
+      throw new Error('Product not found')
+    }
+
+    await Product.remove()
+    res.status(200).json({ id: req.params.id })
+  })
+
 module.exports = {
     setProduct,
     getProducts,
+    deleteProduct,
 }

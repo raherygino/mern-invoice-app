@@ -10,6 +10,12 @@ const initialState = {
         isSuccess: false,
         isLoading: false,
         message: '',
+    },
+    get : {
+        isError: false,
+        isSuccess: false,
+        isLoading: false,
+        message: '',
     }
 }
 
@@ -20,6 +26,25 @@ export const createProduct = createAsyncThunk(
     try {
       const token = thunkAPI.getState().auth.userAuth.token
       return await productService.createProduct(productData, token)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+// Create get products
+export const getProducts = createAsyncThunk(
+  'product/get',
+  async (_, thunkAPI) => {
+    try {
+      const organization = thunkAPI.getState().auth.userAuth.organization
+      return await productService.getProducts(organization)
     } catch (error) {
       const message =
         (error.response &&
@@ -53,6 +78,20 @@ export const productSlice = createSlice({
                 state.createOrUpdate.isLoading = false
                 state.createOrUpdate.isError = true
                 state.createOrUpdate.message = action.payload
+            })
+
+            .addCase(getProducts.pending, (state) => {
+                state.get.isLoading = true
+            })
+            .addCase(getProducts.fulfilled, (state, action) => {
+                state.get.isLoading = false
+                state.get.isSuccess = true
+                state.products = action.payload
+            }) 
+            .addCase(getProducts.rejected, (state, action) => {
+                state.get.isLoading = false
+                state.get.isError = true
+                state.get.message = action.payload
             })
     }
 })

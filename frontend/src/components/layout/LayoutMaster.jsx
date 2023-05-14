@@ -56,7 +56,7 @@ const LayoutMaster = () => {
                             </NavLink>
 
                             { MainRoutes.children.map((route) => (
-                             route.name !== "show_product" && route.name !== "not_found" ? 
+                             route.name !== "show_product" && route.name !== "edit_product" && route.name !== "not_found" ? 
                                 <NavLink key={route.path} to={ route.path } className="nav-link me-2">
                                     <span className='menu-text'>{ route.name }</span>
                                 </NavLink> : null)) 

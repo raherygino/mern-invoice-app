@@ -26,6 +26,11 @@ const MainRoutes = {
             element: <ShowProduct />
         },
         {
+            name: 'edit_product',
+            path: '/products/edit/:id',
+            element: <NewProduct />
+        },
+        {
             name: 'New invoice',
             path: '/new_invoice',
             element: <NewInvoice />
