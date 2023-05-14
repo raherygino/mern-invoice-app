@@ -2,9 +2,11 @@ const express = require('express')
 const router = express.Router()
 
 const {
-    setProduct
+    setProduct,
 } = require('../controllers/productController')
 
-const { product } = require('../middleware/authMiddleware')
+const { protect } = require('../middleware/authMiddleware')
 
-router.post('/', product, setProduct)
+router.post('/', protect, setProduct)
+
+module.exports = router

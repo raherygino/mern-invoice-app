@@ -27,7 +27,7 @@ const productSchema = mongoose.Schema(
             ref: 'SubCategory',
         },
         price: {
-            type: int,
+            type: Number,
             require: [true, 'Price required']
         },
         description:  {
