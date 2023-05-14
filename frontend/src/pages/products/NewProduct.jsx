@@ -2,7 +2,7 @@ import Container from 'react-bootstrap/Container'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import Dropdown from 'react-bootstrap/Dropdown'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Input from '../../components/form/Input'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -25,6 +25,9 @@ import { createProduct, reset } from '../../features/products/productSlice'
 const NewProduct = ({organization, user}) => {  
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+
     const { categories, stateCreate } = useSelector(
       (state) => state.categories
     )
@@ -70,7 +73,8 @@ const NewProduct = ({organization, user}) => {
         
         if (createOrUpdate.isSuccess) {
             toast.success(createOrUpdate.message)
-        }
+            navigate("/show")
+        
 
         if (createOrUpdate.isError) {
             toast.error(createOrUpdate.message)
