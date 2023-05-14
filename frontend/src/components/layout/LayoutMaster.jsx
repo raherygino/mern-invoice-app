@@ -56,7 +56,7 @@ const LayoutMaster = () => {
 
                             { MainRoutes.children.map((route) => (
                              route.name !== "show_product" && route.name !== "not_found" ? 
-                                <NavLink to={ route.path } className="nav-link me-2">
+                                <NavLink key={route.path} to={ route.path } className="nav-link me-2">
                                     <span className='menu-text'>{ route.name }</span>
                                 </NavLink> : null)) 
                             }
@@ -68,11 +68,11 @@ const LayoutMaster = () => {
                                 <Dropdown.Toggle id="dropdown-autoclose-true" className="btn-dark w-auto btn-user d-inline-flex align-items-center">
                                     <span className="symbol symbol-35 symbol-light-danger">
                                         <span className="symbol-label font-size-h5 font-weight-bold">
-                                            { userAuth.lastname.charAt(0) }
+                                            { userAuth !== null ? userAuth.lastname.charAt(0) : null}
                                         </span>
                                     </span>
                                     <span className="text-dark-50 font-weight-bolder font-size-base ml-3">
-                                        {userAuth.lastname}
+                                        { userAuth !== null ? userAuth.lastname : null}
                                     </span>
                                 </Dropdown.Toggle>
 
