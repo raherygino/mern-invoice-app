@@ -1,6 +1,6 @@
 
 
-const Products = () => {
+const ListProducts = () => {
 
     return(
         <>
@@ -9,4 +9,4 @@ const Products = () => {
     )
 }
 
-export default Products;
+export default ListProducts;

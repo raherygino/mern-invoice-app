@@ -47,7 +47,7 @@ export const productSlice = createSlice({
                 state.createOrUpdate.isLoading = false
                 state.createOrUpdate.isSuccess = true
                 state.createOrUpdate.message = 'Product created !'
-                state.products = action.payload
+                state.product = action.payload
             }) 
             .addCase(createProduct.rejected, (state, action) => {
                 state.createOrUpdate.isLoading = false

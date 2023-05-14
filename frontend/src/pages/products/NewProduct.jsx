@@ -36,7 +36,7 @@ const NewProduct = ({organization, user}) => {
         (state) =>  state.subCategories
     )
 
-    const { products, createOrUpdate } = useSelector(
+    const { products, createOrUpdate, product } = useSelector(
         (state) => state.products
     )
 
@@ -73,8 +73,8 @@ const NewProduct = ({organization, user}) => {
         
         if (createOrUpdate.isSuccess) {
             toast.success(createOrUpdate.message)
-            navigate("/show")
-        
+            navigate(`/products/show/${product._id}`)
+        }
 
         if (createOrUpdate.isError) {
             toast.error(createOrUpdate.message)
@@ -84,7 +84,7 @@ const NewProduct = ({organization, user}) => {
             dispatch(reset())
         }
 
-    }, [setConfig, stateCreate, subCategoryCreate, products, createOrUpdate, dispatch])
+    }, [setConfig, stateCreate, subCategoryCreate, products, createOrUpdate, dispatch, navigate, product])
 
     const onEdit = (index) => {
         setConfig({
