@@ -35,6 +35,7 @@ const NewProduct = ({organization}) => {
 
     const [modal, setModal] = useState({
         categorySelected: undefined,
+        subCategorySelected: undefined,
         category: false,
         listCategory: false,
         subCategory: false,
@@ -60,6 +61,14 @@ const NewProduct = ({organization}) => {
             categorySelected: categories[index],
             listCategory: false,
             category: true,
+        })
+    }
+
+    const onEditSubCategory = (index) => {
+        setModal({
+            subCategorySelected: subCategories[index],
+            listSubCategory: false,
+            subCategory: true,
         })
     }
     
@@ -138,6 +147,7 @@ const NewProduct = ({organization}) => {
                     <NewSubCategoryModal 
                         show={modal.subCategory}
                         categories={categories}
+                        subCategory={modal.subCategorySelected}
                         organization={organization}
                         message={subCategoryCreate.message}
                         isSuccess={subCategoryCreate.isSuccess}
@@ -151,7 +161,7 @@ const NewProduct = ({organization}) => {
                         subCategories={subCategories}
                         categories={categories}
                         onSuccess={onSuccess}
-                        onEdit={onEdit}
+                        onEdit={onEditSubCategory}
                         onHide={() => setModal({listCategory: false})} />
                 </div>
             </Container>

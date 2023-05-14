@@ -5,10 +5,10 @@ import Input from "../../../components/form/Input"
 import Select from "../../../components/form/Select"
 import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
-import { createSubCategory, reset } from "../../../features/sub-categories/subCategorySlice"
+import { createSubCategory, reset, updateSubCategory } from "../../../features/sub-categories/subCategorySlice"
 import { toast } from "react-toastify"
 
-const NewSubCategoryModal = ({show, onHide, categories, organization, message, isLoading, isSuccess, isError}) => {
+const NewSubCategoryModal = ({show, onHide, categories, subCategory, organization, message, isLoading, isSuccess, isError}) => {
 
     const [dataSubCategory, setDataSubCategory] = useState({
         category: '',
@@ -20,14 +20,18 @@ const NewSubCategoryModal = ({show, onHide, categories, organization, message, i
 
 
     useEffect(() => {
-        
+
+        if (subCategory !== undefined) {
+            setDataSubCategory(subCategory)
+        }
+
         if (isSuccess) {
             setDataSubCategory({
                 name: '',
                 category: '',
                 organization: ''
             })
-            toast.success(`Subcategory created`)
+            toast.success(message)
         }
         
         if (isError) {
@@ -37,7 +41,7 @@ const NewSubCategoryModal = ({show, onHide, categories, organization, message, i
         return () => {
             dispatch(reset())
         }
-    }, [isError, isSuccess, dispatch, message])
+    }, [isError, isSuccess, dispatch, message, subCategory])
     
     const onChange = (e) => {
         setDataSubCategory((prevState) => ({
@@ -50,13 +54,16 @@ const NewSubCategoryModal = ({show, onHide, categories, organization, message, i
     const onSubmit = (e) => {
         e.preventDefault()
         
-        if (dataSubCategory.name === "") {
+        if (dataSubCategory.name === "" && subCategory === undefined) {
             toast.error('Name invalide')
-        } else if (dataSubCategory.category === "") {
+        } else if (dataSubCategory.category === "" && subCategory === undefined) {
             toast.error('Choose category')
-
         } else {
-            dispatch(createSubCategory(dataSubCategory))
+            if (subCategory === undefined) {
+                dispatch(createSubCategory(dataSubCategory))
+            } else {
+                dispatch(updateSubCategory(dataSubCategory))
+            }
         }
     }
 
@@ -65,7 +72,7 @@ const NewSubCategoryModal = ({show, onHide, categories, organization, message, i
             id="modal-sub-category"
             size="md"
             show={show}
-            title="New sub category"
+            title={ subCategory !== undefined ? `Edit ${subCategory.name}` : 'New sub category'}
             onSubmit={onSubmit}
             onHide={onHide}
             enableBtnOk={isLoading}>
@@ -75,8 +82,9 @@ const NewSubCategoryModal = ({show, onHide, categories, organization, message, i
                         id="name"
                         label="Name"
                         onChange={onChange}
-                        value={dataSubCategory.name}/>
+                        value={dataSubCategory.name} />
                 </Col>
+
                 <Col lg={6} md={6}>
                     <Select
                         id="category"
@@ -84,9 +92,23 @@ const NewSubCategoryModal = ({show, onHide, categories, organization, message, i
                         onChange={onChange}
                         value={dataSubCategory.category}>
                         <option>Choose</option>
+
                         { categories.message === undefined &&  categories.organization === undefined ? categories.map((category) => (
-                            <option key={category._id} value={category._id}>{ category.name }</option>)) :
-                            <option value={null}>None</option>
+                            subCategory !== undefined && subCategory.category === category._id ?
+                            <option 
+                                key={category._id} 
+                                value={category._id} 
+                                selected>
+                                { category.name }
+                            </option> :
+
+                            <option 
+                                key={category._id} 
+                                value={category._id}>
+                                    { category.name }
+                            </option>
+                            )) 
+                            : <option value={null}>None</option>
                         }
                     </Select>
                 </Col>

@@ -112,6 +112,20 @@ export const subCategorySlice = createSlice({
         state.subCategoryCreate.message = action.payload
       })
 
+      .addCase(updateSubCategory.pending, (state) => {
+        state.subCategoryCreate.isLoading = true
+      })
+      .addCase(updateSubCategory.fulfilled, (state, action) => {
+        state.subCategoryCreate.isLoading = false
+        state.subCategoryCreate.isSuccess = true
+        state.subCategoryCreate.message = 'Sub category updated!'
+      })
+      .addCase(updateSubCategory.rejected, (state, action) => {
+        state.subCategoryCreate.isLoading = false
+        state.subCategoryCreate.isError = true
+        state.subCategoryCreate.message = action.payload
+      })
+
       .addCase(getSubCategories.pending, (state) => {
         state.isLoading = true
       })
@@ -125,6 +139,7 @@ export const subCategorySlice = createSlice({
         state.isError = true
         state.message = action.payload
       })
+      
 
       .addCase(getSubCategoriesByCategory.pending, (state) => {
         state.isLoading = true
@@ -135,20 +150,6 @@ export const subCategorySlice = createSlice({
         state.subCategories = action.payload
       })
       .addCase(getSubCategoriesByCategory.rejected, (state, action) => {
-        state.isLoading = false
-        state.isError = true
-        state.message = action.payload
-      })
-
-      .addCase(updateSubCategory.pending, (state) => {
-        state.isLoading = true
-      })
-      .addCase(updateSubCategory.fulfilled, (state, action) => {
-        state.isLoading = false
-        state.isSuccess = true
-        state.subCategories = action.payload
-      })
-      .addCase(updateSubCategory.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload
