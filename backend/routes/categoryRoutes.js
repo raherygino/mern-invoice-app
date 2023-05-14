@@ -14,6 +14,6 @@ router.get('/:id', getCategories)
 router.get('/show/:organization/:id', getCategory)
 router.get('/delete/:id', deleteCategory)
 router.post('/',protect, setCategory)
-router.post('/update/:id', updateCategory)
+router.post('/update/:id',protect, updateCategory)
 
 module.exports = router

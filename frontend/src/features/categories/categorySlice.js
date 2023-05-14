@@ -59,7 +59,8 @@ export const updateCategory = createAsyncThunk(
   'categories/update',
   async (categoryData , thunkAPI) => {
     try {
-      return await categoryService.updateCategory(categoryData)
+      const token = thunkAPI.getState().auth.user.token
+      return await categoryService.updateCategory(categoryData, token)
     } catch (error) {
       const message =
         (error.response &&

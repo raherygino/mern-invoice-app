@@ -2,6 +2,15 @@ import axios from 'axios'
 
 const API_URL = 'http://127.0.0.1:5000/api/categories/'
 
+const setConfig = (token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+  return config
+}
+
 // Get categories
 const getCategories = async (organization) => {
   const response = await axios.get(`${API_URL}${organization}`)
@@ -15,22 +24,17 @@ const getCategory = async (organization, id) => {
 }
 
 // Update category
-const updateCategory = async (categoryData) => {
-  const response = await axios.post(`${API_URL}update/${categoryData._id}`, categoryData)
+const updateCategory = async (categoryData, token) => {
+  const response = await axios.post(`${API_URL}update/${categoryData._id}`, categoryData, setConfig(token))
   return response.data
 }
 
 // Create new category
 const createCategory = async (categoryData, token) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }
-
-  const response = await axios.post(API_URL, categoryData, config)
+  const response = await axios.post(API_URL, categoryData, setConfig(token))
   return response.data
 }
+
 const categoryService = {
     getCategories,
     getCategory,
