@@ -78,8 +78,8 @@ const LayoutMaster = ({organization, userAuth}) => {
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu className='ml-4'>
-                                    { Menu.user.map((item) => (
-                                        <Link to={item.to} data-rr-ui-dropdown-item className='dropdown-item'>
+                                    { Menu.user.map((item, index) => (
+                                        <Link to={item.to} key={index} data-rr-ui-dropdown-item className='dropdown-item'>
                                             <Svg name={ item.icon } variant={ item.variant } />
                                             <span className="navi-text ms-2 mt-0-5">{ item.title }</span>
                                         </Link>

@@ -18,6 +18,7 @@ import Products from './pages/products/Products'
 import Invoices from './pages/invoices/Invoices'
 import NewProduct from './pages/products/NewProduct'
 import NewInvoice from './pages/invoices/NewInvoice'
+import NotFound from './pages/notFound'
 function App() {
   
   const dispatch = useDispatch()
@@ -56,6 +57,7 @@ function App() {
             <Route path='/products' element={ <Products />} />
             <Route path='/new-invoice' element={ <NewInvoice />} />
             <Route path='/invoices' element={ <Invoices />} />
+            <Route path='/*' element={<NotFound user={users} />} />
           </Route>
         </Routes>
       </Router>
