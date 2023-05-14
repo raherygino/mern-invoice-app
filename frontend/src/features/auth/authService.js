@@ -2,6 +2,13 @@ import axios from 'axios'
 
 const API_URL = 'http://127.0.0.1:5000/api/users/'
 
+
+
+const getUserById = async (id) => {
+  const response = await axios.get(`${API_URL}info/${id}`)
+  return response.data
+}
+
 // Register user
 const register = async (userData) => {
 
@@ -33,6 +40,7 @@ const authService = {
   register,
   logout,
   login,
+  getUserById,
 }
 
 export default authService

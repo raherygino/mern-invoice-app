@@ -1,3 +1,4 @@
+import BreadCrumb from "../components/layout/BreadCrumb"
 
 
 
@@ -5,7 +6,7 @@ const Home = ({user}) => {
 
     return(
         <>
-            <h1>Bonjour { user.lastname }</h1>
+            <BreadCrumb></BreadCrumb>
         </>
     )
 }

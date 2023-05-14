@@ -2,7 +2,7 @@ import Container from 'react-bootstrap/Container'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import Dropdown from 'react-bootstrap/Dropdown'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
 import Input from '../../components/form/Input'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -21,12 +21,13 @@ import ListSubCategoryModal from './modals/ListSubCategoryModal'
 import Svg from '../../components/icons/Svg'
 import Menu from '../../menu'
 import { createProduct, reset } from '../../features/products/productSlice'
+import BreadCrumb from '../../components/layout/BreadCrumb'
 
-const NewProduct = ({organization, user}) => {  
+const NewProduct = () => {  
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
-
+    const [user, userAuth] = useOutletContext()
 
     const { categories, stateCreate } = useSelector(
       (state) => state.categories
@@ -56,8 +57,8 @@ const NewProduct = ({organization, user}) => {
         sub_category: '',
         price: 0,
         description: '',
-        organization: user.organization,
-        user: user._id,
+        organization: userAuth.organization,
+        user: userAuth._id,
     })
 
     useEffect(() => {
@@ -141,25 +142,14 @@ const NewProduct = ({organization, user}) => {
     dispatch(getCategories())
     dispatch(getSubCategories())
 
-    return(
-        <div className="subheader py-4 pt-lg-0 pb-lg-10">
-            <Container className="d-flex align-items-center justify-content-between flex-wrap">
-                <div className="d-flex flex-column mr-5">
-                    <h4 className="text-primary font-weight-bold py-1 mr-5 my-0">New product </h4>
-                    <ul className="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 m-0 font-size-sm">
-                        <li className="breadcrumb-item">
-                            <Link to="/" className="text-muted">Home </Link>
-                        </li>
-                        <li className="breadcrumb-item">
-                            <span className=" active">New product</span>
-						</li>
-					</ul>
-				</div>
+    if (user === undefined) {
+        return(<>Error</>)
+    }
 
-            { categories.message ?  <p className='badge bg-danger'> { categories.message } </p>: null}
-            
-                <div className="d-flex align-items-center flex-wrap py-2">
-                    <Dropdown className="d-inline mx-2">
+    return(
+        <>
+            <BreadCrumb title="New product" parent="Products" linkParent="/products">
+                <Dropdown className="d-inline mx-2"> 
                         <Dropdown.Toggle className='btn-light-primary font-weight-bold ' id="dropdown-autoclose-true">
                             <span className="svg-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -184,14 +174,14 @@ const NewProduct = ({organization, user}) => {
 
                     <NewCategoryModal
                         show={config.category}
-                        organization={organization}
+                        organization={user.organization}
                         category={config.categorySelected}
                         state={stateCreate}
                         onHide={() => onHideCategory()} /> 
 
                     <ListCategoryModal 
                         show={config.listCategory}
-                        organization={organization}
+                        organization={user.organization}
                         categories={categories}
                         onSuccess={onSuccess}
                         onEdit={onEdit}
@@ -201,7 +191,7 @@ const NewProduct = ({organization, user}) => {
                         show={config.subCategory}
                         categories={categories}
                         subCategory={config.subCategorySelected}
-                        organization={organization}
+                        organization={user.organization}
                         message={subCategoryCreate.message}
                         isSuccess={subCategoryCreate.isSuccess}
                         isLoading={subCategoryCreate.isLoading}
@@ -210,14 +200,13 @@ const NewProduct = ({organization, user}) => {
                         
                     <ListSubCategoryModal 
                         show={config.listSubCategory}
-                        organization={organization}
+                        organization={user.organization}
                         subCategories={subCategories}
                         categories={categories}
                         onSuccess={onSuccess}
                         onEdit={onEditSubCategory}
                         onHide={() => setConfig({listCategory: false})} />
-                </div>
-            </Container>
+            </BreadCrumb>
 
             <Container className="mt-6">
                 <Card>
@@ -277,7 +266,7 @@ const NewProduct = ({organization, user}) => {
                     </Card.Body>
                 </Card>
             </Container>
-        </div>
+            </>
     )
 }
 

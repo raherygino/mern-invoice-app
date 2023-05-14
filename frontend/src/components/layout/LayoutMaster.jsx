@@ -5,23 +5,28 @@ import NavDropdown from 'react-bootstrap/NavDropdown'
 import Dropdown from 'react-bootstrap/Dropdown'
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { logout, reset } from '../../features/auth/authSlice'
+import { getUserById, logout, reset } from '../../features/auth/authSlice'
 import { useEffect } from 'react'
 import Svg from '../icons/Svg'
 import Menu from '../../menu'
+import MainRoutes from '../../routes/MainRoutes'
 
-const LayoutMaster = ({organization, userAuth}) => {
+const LayoutMaster = () => {
 
+  //  const location = useLocation()
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const { user } = useSelector((state) => state.auth)
+    const { user, userAuth } = useSelector((state) => state.auth)
     
     useEffect(() => {
-        if (!user) {
+        if (!userAuth) {
             navigate('/login')
         }
-    }, [user, navigate])
+    }, [userAuth, navigate])
 
+    if (userAuth !== undefined) {
+        dispatch(getUserById(userAuth._id))
+    }
 
     const onLogout = () => {
       dispatch(logout())
@@ -33,7 +38,7 @@ const LayoutMaster = ({organization, userAuth}) => {
             <Navbar bg="dark" variant='dark' expand="lg">
                 <Container fluid>
                     <Link className="navbar-brand" to="/">
-                        { organization.name }
+                        { user ? user.organization.name : null }
                     </Link>
                     <Navbar.Toggle aria-controls="navbarScroll" />
                     <Navbar.Collapse id="navbarScroll">
@@ -46,21 +51,12 @@ const LayoutMaster = ({organization, userAuth}) => {
                                 <span className='menu-text'>Home</span>
                             </NavLink>
 
-                            <NavLink to="/new-product" className="nav-link me-2">
-                                <span className='menu-text'>New product</span>
-                            </NavLink>
-
-                            <NavLink to="/products" className="nav-link me-2">
-                                <span className='menu-text'>All products</span>
-                            </NavLink>
-
-                            <NavLink to="/new-invoice" className="nav-link me-2">
-                                <span className='menu-text'>New invoice</span>
-                            </NavLink>
-
-                            <NavLink to="/invoices" className="nav-link me-2">
-                                <span className='menu-text'>All invoices</span>
-                            </NavLink>
+                            { MainRoutes.children.map((route) => (
+                             route.name !== "show_product" && route.name !== "not_found" ? 
+                                <NavLink to={ route.path } className="nav-link me-2">
+                                    <span className='menu-text'>{ route.name }</span>
+                                </NavLink> : null)) 
+                            }
 
                         </Nav>
                     
@@ -69,11 +65,11 @@ const LayoutMaster = ({organization, userAuth}) => {
                                 <Dropdown.Toggle id="dropdown-autoclose-true" className="btn-dark w-auto btn-user d-inline-flex align-items-center">
                                     <span className="symbol symbol-35 symbol-light-danger">
                                         <span className="symbol-label font-size-h5 font-weight-bold">
-                                            { userAuth.lastname !== undefined ? userAuth.lastname.charAt(0) : 'A'}
+                                            { user !== undefined ? user.lastname.charAt(0) : 'A'}
                                         </span>
                                     </span>
                                     <span className="text-dark-50 font-weight-bolder font-size-base ml-3">
-                                        { `${userAuth.lastname} ${userAuth.firstname}` }
+                                        {  user ? `${user.lastname} ${user.firstname}` : "Username"}
                                     </span>
                                 </Dropdown.Toggle>
 
@@ -98,7 +94,9 @@ const LayoutMaster = ({organization, userAuth}) => {
             </Navbar>
 
             <Container className='mt-3'>
-                <Outlet />
+                <div className="subheader py-4 pt-lg-0 pb-lg-10">
+                    <Outlet context={[user, userAuth]} />
+                </div>
             </Container>
         </>
     )

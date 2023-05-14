@@ -1,10 +1,11 @@
+import BreadCrumb from "../../components/layout/BreadCrumb";
 
 
 const ListProducts = () => {
 
     return(
         <>
-            <h2>Products</h2>
+            <BreadCrumb title="Products"></BreadCrumb>
         </>
     )
 }
