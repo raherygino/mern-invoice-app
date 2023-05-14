@@ -6,8 +6,11 @@ const Product = require('../models/productModel')
 // @access Private
 
 const setProduct = asyncHandler(async (req, res) => {
-    const product = await Product.create(req.body)
-    res.status(200).json(product)
+    Product.create(req.body).then((result) => {
+        res.status(200).json(result)
+    }).catch((error) => {
+        res.status(400).json(error)
+    })
 })
 
 module.exports = {
