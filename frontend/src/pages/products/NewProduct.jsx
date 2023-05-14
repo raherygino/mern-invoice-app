@@ -20,8 +20,9 @@ import { getSubCategories, getSubCategoriesByCategory } from '../../features/sub
 import ListSubCategoryModal from './modals/ListSubCategoryModal'
 import Svg from '../../components/icons/Svg'
 import Menu from '../../menu'
+import { createProduct, reset } from '../../features/products/productSlice'
 
-const NewProduct = ({organization, user}) => {
+const NewProduct = ({organization, user}) => {  
 
     const dispatch = useDispatch()
     const { categories, stateCreate } = useSelector(
@@ -30,6 +31,10 @@ const NewProduct = ({organization, user}) => {
     
     const { subCategories, subCategoryCreate, subCategoriesByCategory } = useSelector(
         (state) =>  state.subCategories
+    )
+
+    const { products, createOrUpdate } = useSelector(
+        (state) => state.products
     )
 
     const [config, setConfig] = useState({
@@ -48,8 +53,8 @@ const NewProduct = ({organization, user}) => {
         sub_category: '',
         price: 0,
         description: '',
-        organization: organization,
-        user: user,
+        organization: user.organization,
+        user: user._id,
     })
 
     useEffect(() => {
@@ -62,8 +67,20 @@ const NewProduct = ({organization, user}) => {
             setConfig({subCategory: false})
             setConfig({listSubCategory: true})
         }
+        
+        if (createOrUpdate.isSuccess) {
+            toast.success(createOrUpdate.message)
+        }
 
-    }, [setConfig, stateCreate, subCategoryCreate])
+        if (createOrUpdate.isError) {
+            toast.error(createOrUpdate.message)
+        }
+        
+        return () => {
+            dispatch(reset())
+        }
+
+    }, [setConfig, stateCreate, subCategoryCreate, products, createOrUpdate, dispatch])
 
     const onEdit = (index) => {
         setConfig({
@@ -114,7 +131,7 @@ const NewProduct = ({organization, user}) => {
 
     const onSubmit = (e) => {
         e.preventDefault()
-        console.log(dataProduct)
+        dispatch(createProduct(dataProduct))
     }
 
     dispatch(getCategories())

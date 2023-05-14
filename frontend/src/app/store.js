@@ -4,6 +4,7 @@ import userReducer from '../features/users/userSlice'
 import organizationReducer  from '../features/organization/organizationSlice'
 import categoryReducer from '../features/categories/categorySlice'
 import subCategorySlice from '../features/sub-categories/subCategorySlice'
+import productSlice from '../features/products/productSlice'
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     users: userReducer,
     organization: organizationReducer,
     categories: categoryReducer,
-    subCategories: subCategorySlice
+    subCategories: subCategorySlice,
+    products: productSlice
   },
 })
