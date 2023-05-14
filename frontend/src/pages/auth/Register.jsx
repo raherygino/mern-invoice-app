@@ -31,7 +31,7 @@ const Register = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
   
-    const { user, isError, isLoading, isSuccess, message } = useSelector(
+    const { userAuth, isError, isLoading, isSuccess, message } = useSelector(
       (state) => state.auth
     )
   
@@ -40,12 +40,12 @@ const Register = () => {
         toast.error(message)
       }
   
-      if (isSuccess || user) {
+      if (isSuccess || userAuth) {
         navigate('/')
       }
   
       dispatch(reset())
-    }, [user, isError, isSuccess, message, navigate, dispatch])
+    }, [userAuth, isError, isSuccess, message, navigate, dispatch])
   
     const onChange = (e) => {
       setFormData((prevState) => ({

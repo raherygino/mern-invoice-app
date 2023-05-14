@@ -34,6 +34,7 @@ const LayoutMaster = () => {
     const onLogout = () => {
       dispatch(logout())
       dispatch(reset())
+      navigate('/login')
     }
 
     return(

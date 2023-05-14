@@ -30,7 +30,7 @@ const Login = () => {
       toast.error(message)
     }
 
-    if (isSuccess || userAuth) {
+    if (userAuth) {
       navigate('/')
     }
 
