@@ -2,6 +2,16 @@ import axios from 'axios'
 
 const API_URL = 'http://127.0.0.1:5000/api/subcategories/'
 
+
+const setConfig = (token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+  return config
+}
+
 // Get subcategories
 const getSubCategories = async (organization) => {
   const response = await axios.get(`${API_URL}${organization}`)
@@ -15,22 +25,17 @@ const getSubCategoriesByCategory = async (category) => {
 }
 
 // Update subcategory
-const updateSubCategory = async (subCategoryData) => {
-  const response = await axios.post(`${API_URL}update/${subCategoryData._id}`, subCategoryData)
+const updateSubCategory = async (subCategoryData, token) => {
+  const response = await axios.post(`${API_URL}update/${subCategoryData._id}`, subCategoryData, setConfig(token))
   return response.data
 }
 
 // Create new subcategory
-const createSubCategory = async (subCategoryData, token) => {/*
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }*/
-
-  const response = await axios.post(API_URL, subCategoryData)
+const createSubCategory = async (subCategoryData, token) => {
+  const response = await axios.post(API_URL, subCategoryData, setConfig(token))
   return response.data
 }
+
 const subCategoryService = {
     getSubCategories,
     getSubCategoriesByCategory,

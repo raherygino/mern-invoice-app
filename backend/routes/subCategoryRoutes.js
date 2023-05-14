@@ -8,11 +8,12 @@ const {
     deleteSubCategory,
 } = require('../controllers/subCategoryController')
 
+const { protect } = require('../middleware/authMiddleware')
 
 router.get('/:id', getSubCategories)
 router.get('/bycategory/:id', getSubCategoriesByCategory)
 router.get('/delete/:id', deleteSubCategory)
-router.post('/', setSubCategory)
-router.post('/update/:id', updateSubCategory)
+router.post('/',protect, setSubCategory)
+router.post('/update/:id',protect, updateSubCategory)
 
 module.exports = router
