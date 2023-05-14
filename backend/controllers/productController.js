@@ -20,6 +20,14 @@ const getProducts = asyncHandler(async (req, res) => {
     res.status(200).json(products)
 })
 
+// @desc    Get categories
+// @route   GET /api/products/show/:id
+// @access  Private
+const getProduct = asyncHandler(async (req, res) => {
+    const product = await Product.findById(req.params.id)
+    res.status(200).json(product)
+})
+
 
 // @desc    Delete products
 // @route   DELETE /api/products/delete/:id
@@ -39,6 +47,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
 module.exports = {
     setProduct,
+    getProduct,
     getProducts,
     deleteProduct,
 }
