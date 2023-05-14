@@ -16,24 +16,23 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getCategories } from '../../features/categories/categorySlice'
 import ListCategoryModal from './modals/ListCategoryModal'
 import { toast } from 'react-toastify'
-import { getSubCategories } from '../../features/sub-categories/subCategorySlice'
+import { getSubCategories, getSubCategoriesByCategory } from '../../features/sub-categories/subCategorySlice'
 import ListSubCategoryModal from './modals/ListSubCategoryModal'
 import Svg from '../../components/icons/Svg'
 import Menu from '../../menu'
 
-const NewProduct = ({organization}) => {
+const NewProduct = ({organization, user}) => {
 
-    
     const dispatch = useDispatch()
     const { categories, stateCreate } = useSelector(
       (state) => state.categories
     )
-
-    const { subCategories, subCategoryCreate } = useSelector(
+    
+    const { subCategories, subCategoryCreate, subCategoriesByCategory } = useSelector(
         (state) =>  state.subCategories
     )
 
-    const [modal, setModal] = useState({
+    const [config, setConfig] = useState({
         categorySelected: undefined,
         subCategorySelected: undefined,
         category: false,
@@ -43,21 +42,31 @@ const NewProduct = ({organization}) => {
         error: '',
     })
 
+    const [dataProduct, setDataProduct] = useState({
+        name: '',
+        category: '',
+        sub_category: '',
+        price: 0,
+        description: '',
+        organization: organization,
+        user: user,
+    })
+
     useEffect(() => {
         if (stateCreate.isSuccess) {
-            setModal({category: false})
-            setModal({listCategory: true})
+            setConfig({category: false})
+            setConfig({listCategory: true})
         }
 
         if (subCategoryCreate.isSuccess) {
-            setModal({subCategory: false})
-            setModal({listSubCategory: true})
+            setConfig({subCategory: false})
+            setConfig({listSubCategory: true})
         }
 
-    }, [setModal, stateCreate, subCategoryCreate])
+    }, [setConfig, stateCreate, subCategoryCreate])
 
     const onEdit = (index) => {
-        setModal({
+        setConfig({
             categorySelected: categories[index],
             listCategory: false,
             category: true,
@@ -65,11 +74,29 @@ const NewProduct = ({organization}) => {
     }
 
     const onEditSubCategory = (index) => {
-        setModal({
+        setConfig({
             subCategorySelected: subCategories[index],
             listSubCategory: false,
             subCategory: true,
         })
+    }
+
+    const onChange = (e) => {
+
+        if (e.target !== undefined && e.target.name === 'category') {
+            dispatch(getSubCategoriesByCategory(e.target.value))
+        }
+        if (e.target === undefined) {
+            setDataProduct((prevState) => ({
+                ...prevState,
+                description : e }
+            ))
+        } else {
+            setDataProduct((prevState) => ({
+                ...prevState,
+                [e.target.name] : e.target.value }
+            ))
+        }
     }
     
     const onSuccess = () => {
@@ -78,11 +105,16 @@ const NewProduct = ({organization}) => {
     }
 
     const onHideCategory = () => {
-        setModal({category: false})
+        setConfig({category: false})
 
-        if (modal.categorySelected !== undefined) {
-            setModal({listCategory: true})
+        if (config.categorySelected !== undefined) {
+            setConfig({listCategory: true})
         } 
+    }
+
+    const onSubmit = (e) => {
+        e.preventDefault()
+        console.log(dataProduct)
     }
 
     dispatch(getCategories())
@@ -121,7 +153,7 @@ const NewProduct = ({organization}) => {
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
                             { Menu.category.map((item) => (
-                                <Dropdown.Item href="#" key={item.title} onClick={() => setModal(item.modal)}>
+                                <Dropdown.Item href="#" key={item.title} onClick={() => setConfig(item.modal)}>
                                     <Svg name={item.icon} variant={item.variant}/>
                                     <span className="navi-text ms-2 mt-0-5">{item.title}</span>
                                 </Dropdown.Item> )) 
@@ -130,39 +162,39 @@ const NewProduct = ({organization}) => {
                     </Dropdown>
 
                     <NewCategoryModal
-                        show={modal.category}
+                        show={config.category}
                         organization={organization}
-                        category={modal.categorySelected}
+                        category={config.categorySelected}
                         state={stateCreate}
                         onHide={() => onHideCategory()} /> 
 
                     <ListCategoryModal 
-                        show={modal.listCategory}
+                        show={config.listCategory}
                         organization={organization}
                         categories={categories}
                         onSuccess={onSuccess}
                         onEdit={onEdit}
-                        onHide={() => setModal({listCategory: false})} />
+                        onHide={() => setConfig({listCategory: false})} />
 
                     <NewSubCategoryModal 
-                        show={modal.subCategory}
+                        show={config.subCategory}
                         categories={categories}
-                        subCategory={modal.subCategorySelected}
+                        subCategory={config.subCategorySelected}
                         organization={organization}
                         message={subCategoryCreate.message}
                         isSuccess={subCategoryCreate.isSuccess}
                         isLoading={subCategoryCreate.isLoading}
                         isError={subCategoryCreate.isError}
-                        onHide={() => setModal({subCategory: false})}/>
+                        onHide={() => setConfig({subCategory: false})}/>
                         
                     <ListSubCategoryModal 
-                        show={modal.listSubCategory}
+                        show={config.listSubCategory}
                         organization={organization}
                         subCategories={subCategories}
                         categories={categories}
                         onSuccess={onSuccess}
                         onEdit={onEditSubCategory}
-                        onHide={() => setModal({listCategory: false})} />
+                        onHide={() => setConfig({listCategory: false})} />
                 </div>
             </Container>
 
@@ -170,29 +202,34 @@ const NewProduct = ({organization}) => {
                 <Card>
                     <Card.Body>
                         <Card.Title className='mb-5'>New product</Card.Title>
+                        <form onSubmit={onSubmit}>
                         <Row>
                             <Col lg={3} md={6}>
                                 <Input
                                     id="name"
                                     type="text"
-                                    label="Product name" />
+                                    label="Product name"
+                                    onChange={onChange} />
                             </Col>
                             <Col lg={3} md={6}>
                                 <Select
                                     id="category"
-                                    label="Category">
+                                    label="Category"
+                                    onChange={onChange}>
+                                        <option value="">Select</option>
                                         { categories.organization === undefined && categories.message === undefined ? categories.map((category) => (
-                                            <option key={category._id}>{ category.name }</option>
+                                            <option key={category._id} value={category._id} >{ category.name }</option>
                                         )) : <option>None</option> }
                                 </Select>
                             </Col>
                             <Col lg={3} md={6}>
                                 <Select
                                     id="sub_category"
-                                    label="Sub category">
-                                    <option>Select</option>
-                                    { subCategories.message === undefined ? subCategories.map((subCategory) => (
-                                        <option key={subCategory._id}> { subCategory.name } </option>
+                                    label="Sub category"
+                                    onChange={onChange}>
+                                    <option value="">Select</option>
+                                    { subCategoriesByCategory.message === undefined ? subCategoriesByCategory.map((subCategory) => (
+                                        <option key={subCategory._id} value={subCategory._id}> { subCategory.name } </option>
                                     )): null }
                                 </Select>
                             </Col>
@@ -200,17 +237,22 @@ const NewProduct = ({organization}) => {
                                 <Input
                                     id="price"
                                     type="number"
-                                    label="Price"/>
+                                    label="Price"
+                                    onChange={onChange}/>
                             </Col>
                         </Row>
                         
-                        <ReactQuill theme="snow" />
+                        <ReactQuill theme="snow" name="description" onChange={onChange} />
 
                         <Button 
                             variant="primary"
+                            type='submit'
                             className='mt-2'>
                                 Add
                         </Button>
+
+                        </form>
+
                     </Card.Body>
                 </Card>
             </Container>

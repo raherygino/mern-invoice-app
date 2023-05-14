@@ -13,7 +13,7 @@ const getSubCategories = asyncHandler(async (req, res) => {
 // @route   GET /api/subcategories/bycategory/:id
 // @access  Private
 const getSubCategoriesByCategory = asyncHandler(async (req, res) => {
-    const subCategories = await SubCategory.find({ category: req.params.category })
+    const subCategories = await SubCategory.find({ category: req.params.id })
     res.status(200).json(subCategories)
 })
 

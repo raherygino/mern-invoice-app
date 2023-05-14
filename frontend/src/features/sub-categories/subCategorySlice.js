@@ -3,6 +3,7 @@ import subCategoryService from './subCategoryService'
 
 const initialState = {
   subCategories: [],
+  subCategoriesByCategory: [],
   subCategory: {},
   isError: false,
   isSuccess: false,
@@ -148,7 +149,7 @@ export const subCategorySlice = createSlice({
       .addCase(getSubCategoriesByCategory.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.subCategories = action.payload
+        state.subCategoriesByCategory = action.payload
       })
       .addCase(getSubCategoriesByCategory.rejected, (state, action) => {
         state.isLoading = false

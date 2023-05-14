@@ -53,7 +53,7 @@ function App() {
           </Route>
           <Route element={<LayoutMaster userAuth={ users } organization={organization} />}>
             <Route path='/' element={<Home user={users} />} />
-            <Route path='/new-product' element={ <NewProduct organization={organization._id} />} />
+            <Route path='/new-product' element={ <NewProduct organization={organization._id} user={user._id} />} />
             <Route path='/products' element={ <Products />} />
             <Route path='/new-invoice' element={ <NewInvoice />} />
             <Route path='/invoices' element={ <Invoices />} />
