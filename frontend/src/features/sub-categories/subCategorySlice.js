@@ -59,7 +59,7 @@ export const updateSubCategory = createAsyncThunk(
   'subcategories/update',
   async (subCategoryData , thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.token
+      const token = thunkAPI.getState().auth.userAuth.token
       return await subCategoryService.updateSubCategory(subCategoryData, token)
     } catch (error) {
       const message =
@@ -78,7 +78,7 @@ export const createSubCategory = createAsyncThunk(
   'subcategories/create',
   async (categoryData, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.token
+      const token = thunkAPI.getState().auth.userAuth.token
       return await subCategoryService.createSubCategory(categoryData, token)
     } catch (error) {
       const message =
