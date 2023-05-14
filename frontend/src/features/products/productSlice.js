@@ -16,6 +16,12 @@ const initialState = {
         isSuccess: false,
         isLoading: false,
         message: '',
+    },
+    show : {
+        isError: false,
+        isSuccess: false,
+        isLoading: false,
+        message: '',
     }
 }
 
@@ -45,6 +51,24 @@ export const getProducts = createAsyncThunk(
     try {
       const organization = thunkAPI.getState().auth.userAuth.organization
       return await productService.getProducts(organization)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+// Create get product
+export const getProduct = createAsyncThunk(
+  'product/show',
+  async (id, thunkAPI) => {
+    try {
+      return await productService.getProduct(id)
     } catch (error) {
       const message =
         (error.response &&
@@ -92,6 +116,20 @@ export const productSlice = createSlice({
                 state.get.isLoading = false
                 state.get.isError = true
                 state.get.message = action.payload
+            })
+
+            .addCase(getProduct.pending, (state) => {
+                state.show.isLoading = true
+            })
+            .addCase(getProduct.fulfilled, (state, action) => {
+                state.show.isLoading = false
+                state.show.isSuccess = true
+                state.product = action.payload
+            }) 
+            .addCase(getProduct.rejected, (state, action) => {
+                state.show.isLoading = false
+                state.show.isError = true
+                state.show.message = action.payload
             })
     }
 })

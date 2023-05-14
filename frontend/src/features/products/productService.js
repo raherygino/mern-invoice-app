@@ -23,8 +23,15 @@ const getProducts = async (organization) => {
   return response.data
 }
 
+// Get product
+const getProduct = async (id) => {
+  const response = await axios.get(`${API_URL}show/${id}`)
+  return response.data
+}
+
 const productService = {
     createProduct,
+    getProduct,
     getProducts,
 }
 
