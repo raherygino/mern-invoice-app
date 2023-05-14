@@ -14,7 +14,7 @@ export const getOrganization = createAsyncThunk(
   'organizations/show',
   async (_, thunkAPI) => {
     try {
-      const id = thunkAPI.getState().auth.user.organization
+      const id = thunkAPI.getState().auth.userAuth.organization
       return await organizationService.getOrganization(id)
     } catch (error) {
       const message =

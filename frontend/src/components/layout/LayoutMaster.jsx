@@ -10,6 +10,7 @@ import { useEffect } from 'react'
 import Svg from '../icons/Svg'
 import Menu from '../../menu'
 import MainRoutes from '../../routes/MainRoutes'
+import { getOrganization } from '../../features/organization/organizationSlice'
 
 const LayoutMaster = () => {
 
@@ -17,15 +18,17 @@ const LayoutMaster = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const { user, userAuth } = useSelector((state) => state.auth)
-    
+    const { organization } = useSelector((state) => state.organization )
+
     useEffect(() => {
-        if (!userAuth) {
+        if ( userAuth === null) {
             navigate('/login')
         }
     }, [userAuth, navigate])
 
-    if (userAuth !== undefined) {
+    if (userAuth !== undefined && userAuth !== null) {
         dispatch(getUserById(userAuth._id))
+        dispatch(getOrganization())
     }
 
     const onLogout = () => {
@@ -38,7 +41,7 @@ const LayoutMaster = () => {
             <Navbar bg="dark" variant='dark' expand="lg">
                 <Container fluid>
                     <Link className="navbar-brand" to="/">
-                        { user ? user.organization.name : null }
+                        { organization.name }
                     </Link>
                     <Navbar.Toggle aria-controls="navbarScroll" />
                     <Navbar.Collapse id="navbarScroll">
@@ -65,11 +68,11 @@ const LayoutMaster = () => {
                                 <Dropdown.Toggle id="dropdown-autoclose-true" className="btn-dark w-auto btn-user d-inline-flex align-items-center">
                                     <span className="symbol symbol-35 symbol-light-danger">
                                         <span className="symbol-label font-size-h5 font-weight-bold">
-                                            { user !== undefined ? user.lastname.charAt(0) : 'A'}
+                                            { userAuth.lastname.charAt(0) }
                                         </span>
                                     </span>
                                     <span className="text-dark-50 font-weight-bolder font-size-base ml-3">
-                                        {  user ? `${user.lastname} ${user.firstname}` : "Username"}
+                                        {userAuth.lastname}
                                     </span>
                                 </Dropdown.Toggle>
 

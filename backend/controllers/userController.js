@@ -41,8 +41,8 @@ const registerUser = asyncHandler(async (req, res) => {
   if (user) {
     res.status(201).json({
       _id: user.id,
-      organization: user.organization,/*
-      lastname: user.lastname,
+      organization: user.organization,
+      lastname: user.lastname,/*
       firstname: user.firstname,
       birth_date: user.birth_date,
       birth_place: user.birth_place,
@@ -68,8 +68,8 @@ const loginUser = asyncHandler(async (req, res) => {
   if (user && (await bcrypt.compare(password, user.password))) {
     res.json({
       _id: user.id,
-      organization: user.organization,/*
-      lastname: user.lastname,
+      organization: user.organization,
+      lastname: user.lastname,/*
       firstname: user.firstname,
       birth_date: user.birth_date,
       birth_place: user.birth_place,
