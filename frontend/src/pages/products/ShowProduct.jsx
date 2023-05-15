@@ -45,7 +45,7 @@ const ShowProduct = () => {
        }
    
        const onSuccess = () => {
-           toast.success("ok!")
+           toast.success("Product deleted!")
            navigate('/products')
        }
 

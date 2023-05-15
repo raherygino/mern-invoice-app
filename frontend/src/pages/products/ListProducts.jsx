@@ -35,7 +35,8 @@ const ListProducts = () => {
     }
 
     const onSuccess = () => {
-        toast.success("ok!")
+        toast.success("Product deleted!")
+        dispatch(getProducts())
     }
 
     useEffect(() => {
