@@ -46,13 +46,28 @@ const ListProducts = () => {
         {
             
             name: 'Actions',
-            cell: () => <Button variant="outline-primary" size="sm">Show </Button>,
+            cell: row => 
+                <>
+                    <Button variant="primary" onClick={() => handleShow(row)} className="btn-shadow px-2" size="sm">Show </Button>
+                    <Button variant="success" onClick={() => handleEdit(row)} className="btn-shadow ms-2 px-2" size="sm">Edit</Button>
+                </>,
             ignoreRowClick: true,
             allowOverflow: true,
             button: true,
+            right: true,
         },
         
     ]
+
+    const handleShow = (item) => {
+        navigate(`/products/show/${item._id}`)
+    }
+    
+
+    const handleEdit = (item) => {
+        navigate(`/products/edit/${item._id}`)
+    }
+
 
     const data = []
 
@@ -82,23 +97,14 @@ const ListProducts = () => {
             })
 		}
 
-        const handleEdit = () => {
-            navigate(`/products/edit/${selectedRows[0]._id}`)
-        }
-
 		return (
             <>
-                { selectedRows.length === 1 ? 
-                    <Button key="edit" onClick={handleEdit} variant="success" className="btn-shadow me-2">
-                        Edit
-                    </Button> : null
-                }
-			    <Button key="delete" onClick={handleDelete} variant="danger" className="btn-shadow">
+			    <Button key="delete" onClick={handleDelete} variant="danger">
 				    Delete
 			    </Button>
             </>
 		);
-	}, [selectedRows, toggleCleared, dispatch, navigate]);
+	}, [selectedRows, toggleCleared, dispatch]);
 
     for (let i = 0; i < products.length ; i++) {
         data.push(products[i])
