@@ -20,6 +20,17 @@ const getProducts = asyncHandler(async (req, res) => {
     res.status(200).json(products)
 })
 
+
+const deleteMore = asyncHandler(async (req, res) => {
+    const query = req.query
+    const id = Object.keys(req.query)
+    for (let i = 0; i < id.length; i++) {
+        const product = await Product.findById(query[id[i]])
+        await product.remove()
+    }
+    res.status(200).json({ message : "Deleted !" })
+})
+
 // @desc    Get categories
 // @route   GET /api/products/show/:id
 // @access  Private
@@ -48,6 +59,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 module.exports = {
     setProduct,
     getProduct,
+    deleteMore,
     getProducts,
     deleteProduct,
 }

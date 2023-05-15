@@ -1,15 +1,15 @@
 import BreadCrumb from "../../components/layout/BreadCrumb"
 import Container from 'react-bootstrap/Container'
 import Card from 'react-bootstrap/Card'
-import Table from 'react-bootstrap/Table'
+import Button from 'react-bootstrap/Button'
 import { useDispatch, useSelector } from "react-redux"
 import { getProducts, reset } from "../../features/products/productSlice"
-import ButtonActions from "../../components/form/ButtonActions"
 import { Link, useNavigate } from "react-router-dom"
 import Spinner from "../../components/Spinner"
-import { useEffect } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import ConfirmDialog from "../../components/form/ConfirmDialog"
 import { toast } from 'react-toastify'
+import DataTable from 'react-data-table-component'
 
 const ListProducts = () => {
 
@@ -20,23 +20,88 @@ const ListProducts = () => {
         (state) => state.products
     )
 
-    const onEdit = (index) => {
-        navigate(`/products/edit/${products[index]._id}`)
-    }
+    const columns = [
+        {
+            name: 'Name',
+            selector: row => row.name,
+            sortable: true,
+            grow: 2,
+        },
+        {
+            name: 'Category',
+            selector: row => row.category,
+            sortable: true,
+        },
+        {
+            name: 'Sub category',
+            selector: row => row.sub_category,
+            sortable: true,
+        },
+        {
+            name: 'Price',
+            selector: row => row.price,
+            sortable: true,
+            right: true,
+        },
+        {
+            
+            name: 'Actions',
+            cell: () => <Button variant="outline-primary" size="sm">Show </Button>,
+            ignoreRowClick: true,
+            allowOverflow: true,
+            button: true,
+        },
+        
+    ]
 
-    const onDelete = (id) => {
-     //   console.log(id)
-        ConfirmDialog({
-            title: "Are you sure?",
-            text: "You want to delete",
-            link:`http://127.0.0.1:5000/api/products/delete/${id}`,
-            onSuccess: onSuccess
-        })
-    }
+    const data = []
 
-    const onSuccess = () => {
-        toast.success("Product deleted!")
-        dispatch(getProducts())
+    const [selectedRows, setSelectedRows] = useState([]);
+	const [toggleCleared, setToggleCleared] = useState(false)
+
+	const handleRowSelected = useCallback(state => {
+		setSelectedRows(state.selectedRows);
+	}, []);
+
+	const contextActions = useMemo(() => {
+		const handleDelete = () => {
+            const query = `${selectedRows.map(
+                (product, i) => `id_${i+1}=${product._id}`
+            )}`.replace(',', '&')
+        
+            ConfirmDialog({
+                title: "Are you sure you want to delete",
+                text: `${selectedRows.map(r => r.name)}?`,
+                link:`http://127.0.0.1:5000/api/products/delete_more/?${query}`,
+                onSuccess: () => {
+				    setToggleCleared(!toggleCleared)
+                    toast.success("Product deleted!")
+                    
+                    dispatch(getProducts())
+                }
+            })
+		}
+
+        const handleEdit = () => {
+            navigate(`/products/edit/${selectedRows[0]._id}`)
+        }
+
+		return (
+            <>
+                { selectedRows.length === 1 ? 
+                    <Button key="edit" onClick={handleEdit} variant="success" className="btn-shadow me-2">
+                        Edit
+                    </Button> : null
+                }
+			    <Button key="delete" onClick={handleDelete} variant="danger" className="btn-shadow">
+				    Delete
+			    </Button>
+            </>
+		);
+	}, [selectedRows, toggleCleared, dispatch, navigate]);
+
+    for (let i = 0; i < products.length ; i++) {
+        data.push(products[i])
     }
 
     useEffect(() => {
@@ -46,6 +111,7 @@ const ListProducts = () => {
             dispatch(reset())
         }
     }, [dispatch])
+
     
     if (get.isLoading) {
         return <Spinner />
@@ -53,41 +119,23 @@ const ListProducts = () => {
 
     return(
         <>
-            <BreadCrumb title="Products"></BreadCrumb>
+            <BreadCrumb title="Products">
+                <Link className="btn btn-light-primary" to="/new_product">Add new product</Link>
+            </BreadCrumb>
             
             <Container className="mt-6">
                 <Card>
-                    <Card.Body>
-                        <Card.Title className='mb-5'>All products</Card.Title>
-                        <Table bordered hover size="md">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th className="text-right">Price</th>
-                                    <th>Category</th>
-                                    <th>Sub category</th>
-                                    <th style={{width: '100px'}}>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                { products.map((product, index) => (
-                                <tr key={index}>
-                                    <td><Link to={`/products/show/${product._id}`}>{ product.name }</Link></td>
-                                    <td align="right">{ product.price }</td>
-                                    <td>{ product.category }</td>
-                                    <td>{ product.sub_category }</td>
-                                    <td align="center">
-                                        <ButtonActions 
-                                            index={index} 
-                                            item={product}
-                                            onEdit={onEdit} 
-                                            onDelete={onDelete} />
-                                    </td>
-                                </tr>
-                                    
-                                )) }
-                            </tbody>
-                        </Table>
+                    <Card.Body className="px-0 py-0">
+                        <DataTable
+                            title="List products"
+                            columns={columns}
+                            data={data}
+                            pagination
+                            selectableRows
+                            highlightOnHover
+                            contextActions={contextActions}
+                            onSelectedRowsChange={handleRowSelected}
+                            clearSelectedRows={toggleCleared} />
                     </Card.Body>
                 </Card>
             </Container>
