@@ -22,8 +22,8 @@ const productSchema = mongoose.Schema(
             ref: 'Category',
         },
         sub_category: {
-            type: String,
-            require: false,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'SubCategory',
         },
         price: {
             type: Number,

@@ -15,7 +15,7 @@ const columnsProducts = (handleShow,handleEdit) => {
         },
         {
             name: 'Sub category',
-            selector: row => row.sub_category,
+            selector: row => row.sub_category.name,
             sortable: true,
         },
         {
@@ -26,7 +26,7 @@ const columnsProducts = (handleShow,handleEdit) => {
         },
         {
             name: 'Created at',
-            selector: row => row.createdAt,
+            selector: row => new Date(row.createdAt).toLocaleString(),
             sortable: true,
             right: true,
             grow: 2,

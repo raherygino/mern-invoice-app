@@ -1,18 +1,14 @@
 const asyncHandler = require('express-async-handler')
 const Product = require('../models/productModel')
 const Category = require('../models/categoryModel')
+const SubCategory = require('../models/subCategoryModel')
 
 // @desc   set product
 // @route  POST /api/products
 // @access Private
 const setProduct = asyncHandler(async (req, res) => {
-    
-    const category = await Category.findById(req.body.category)
-    req.body.category = category
-    
-    console.log(req.body)
+
     Product.create(req.body).then((result) => {
-        console.log(result)
         res.status(200).json(result)
     }).catch((error) => {
         res.status(400).json(error)
@@ -26,31 +22,40 @@ const getProducts = asyncHandler(async (req, res) => {
     const products = await Product.find({ organization: req.params.organization })
 
     for (let i = 0 ; i < products.length; i++) {
-        const category = await Category.findById(products[i].category)
-        products[i].category = category
+        const idCategory = products[i].category
+        const idSubCategory = products[i].sub_category
+        const category = await Category.findById(idCategory)
+        const subCategory = await SubCategory.findById(idSubCategory)
+        
+        idCategory.category = category
+        idSubCategory.sub_category = subCategory
     }
 
     res.status(200).json(products)
 })
 
+// @desc    Get delete more products
+// @route   GET /api/delete_more
+// @access  Private
 const deleteMore = asyncHandler(async (req, res) => {
     const query = req.query
     const id = Object.keys(req.query)
+
     for (let i = 0; i < id.length; i++) {
         const product = await Product.findById(query[id[i]])
         await product.remove()
     }
+
     res.status(200).json({ message : "Deleted !" })
 })
 
-// @desc    Get categories
+// @desc    Get product
 // @route   GET /api/products/show/:id
 // @access  Private
 const getProduct = asyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id)
     res.status(200).json(product)
 })
-
 
 // @desc    Delete products
 // @route   DELETE /api/products/delete/:id
