@@ -2,8 +2,9 @@ import { useCallback, useMemo, useState } from "react";
 import DataTable from "react-data-table-component"
 import ConfirmDialog from "../form/ConfirmDialog";
 import Button  from "react-bootstrap/Button";
+import { toast } from "react-toastify";
 
-const TableData = ({title, columns, data, deleteLink}) => {
+const TableData = ({title, columns, data, deleteLink, onSuccess}) => {
 
     const [selectedRows, setSelectedRows] = useState([]);
 	const [toggleCleared, setToggleCleared] = useState(false)
@@ -15,7 +16,7 @@ const TableData = ({title, columns, data, deleteLink}) => {
 		const handleDelete = (lnk) => {
             const query = `${selectedRows.map(
                 (item, i) => `id_${i+1}=${item._id}`
-            )}`.replace(',', '&')
+            )}`.replaceAll(',', '&')
         
             ConfirmDialog({
                 title: "Are you sure to delete",
@@ -23,6 +24,8 @@ const TableData = ({title, columns, data, deleteLink}) => {
                 link:`${lnk}?${query}`,
                 onSuccess: () => {
 				    setToggleCleared(!toggleCleared)
+                    onSuccess()
+                    toast.success(`${selectedRows.map(r => r.name)} deleted!`)
                 }
             })
 		}
@@ -34,7 +37,7 @@ const TableData = ({title, columns, data, deleteLink}) => {
 			    </Button>
             </>
 		);
-	}, [selectedRows, toggleCleared, deleteLink]);
+	}, [selectedRows, toggleCleared, deleteLink, onSuccess]);
 
     return (
         <DataTable

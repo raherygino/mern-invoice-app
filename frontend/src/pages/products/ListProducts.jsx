@@ -35,19 +35,18 @@ const ListProducts = () => {
 
     useEffect(() => {
         dispatch(getProducts())
-        //console.log(products)
         return () => {
             dispatch(reset())
         }
     }, [dispatch])
 
-    
-    if (get.isLoading) {
-        return <Spinner />
+    const onSuccess = () => {
+        dispatch(getProducts())
     }
 
     return(
         <>
+        { get.isLoading ? <Spinner /> : null }
             <BreadCrumb title="Products">
                 <Link className="btn btn-light-primary" to="/new_product">Add new product</Link>
             </BreadCrumb>
@@ -56,9 +55,10 @@ const ListProducts = () => {
                 <Card>
                     <Card.Body className="px-0 py-0">
                         <TableData
-                            title="List"
+                            title="List product"
                             data={data}
                             columns={columns}
+                            onSuccess={onSuccess}
                             deleteLink='http://127.0.0.1:5000/api/products/delete_more/'/>
                     </Card.Body>
                 </Card>
