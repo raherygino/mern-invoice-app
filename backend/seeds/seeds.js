@@ -1,4 +1,7 @@
 const mongoose  = require('mongoose')
+const colors = require('colors');
+const dotenv = require('dotenv').config();
+const connectDB = require('../config/db');
 
 const Organization = require('../models/organizationModel')
 const User = require('../models/userModel')
@@ -8,18 +11,17 @@ const Product = require('../models/productModel')
 
 const seedOrganization = require('./OrganizationSeed')
 const seedUser = require('./UserSeed')
+const seedCategory = require('./CategorySeed')
+const seedSubCategory = require('./SubCategorySeed')
+const seedProduct = require('./ProductSeed')
 
-const COUNT_ORG = 6
+const COUNT_ORGANIZATION = 6
 const COUNT_USER = 8
+const COUNT_CATEGORY = 10
+const COUNT_SUB_CATEGORY = 6
+const COUNT_PRODUCT = 60
 
-mongoose.connect('mongodb://127.0.0.1:27017/db_invoice', {
-    useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => {
-        console.log('connected')
-    })
-    .catch((err) => {
-        console.log(err)
-})
+connectDB()
 
 const swipeDB = async () => {
     await Organization .deleteMany({})
@@ -30,14 +32,17 @@ const swipeDB = async () => {
 }
 
 const seedDB = async () => {
-    await seedOrganization(COUNT_ORG)
+    await seedOrganization(COUNT_ORGANIZATION)
     await seedUser(COUNT_USER)
+    await seedCategory(COUNT_CATEGORY)
+    await seedSubCategory(COUNT_SUB_CATEGORY)
+    await seedProduct(COUNT_PRODUCT)
 }
 
 swipeDB().then(() => {
-    console.log("Swiped !!")
+    console.log("Swiped !!".cyan.underline)
 })
 
 seedDB().then(() => {
-    console.log("Created")
+    console.log("Created !!".magenta.underline)
 })
