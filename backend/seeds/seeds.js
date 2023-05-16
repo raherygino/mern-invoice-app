@@ -69,6 +69,7 @@ const categories = (length) => {
 
     return categories;
 }
+
 const subCategories = (length) => {
     const subCategories = []
     for (let i = 0; i < length; i++) {
@@ -95,17 +96,18 @@ const swipeDB = async () => {
 }
 
 const seedOrganization = async () => {
-    await Organization.insertMany(organizations(2))
+    await Organization.insertMany(organizations(4))
 }
 
 const seedUser = async () => {
     const organizationsCreated = await Organization.find()
-    const organization = organizationsCreated[rand(0, organizationsCreated.length - 1)]
-    const allUsers = users(5);
+    const allUsers = users(8);
 
     for (let i = 0 ; i < allUsers.length; i++) {
         const salt = await bcrypt .genSalt(10)
         const hashedPassword = await bcrypt.hash('1234567890', salt)
+        const organization = organizationsCreated[rand(0, organizationsCreated.length - 1)]
+
         allUsers[i].organization = organization._id
         allUsers[i].password = hashedPassword
         User.create(allUsers[i])
@@ -118,6 +120,7 @@ const seedCategory = async () => {
     for (let i = 0; i < organizationsCreated.length; i++) {
         for (let j = 0; j < allCategories.length; j++) {
             allCategories[j].organization = organizationsCreated[i]
+            allCategories[j].name = `Category ${j+1}`
             Category.create(allCategories[j])
         }
     }
@@ -130,10 +133,14 @@ const seedSubCategory = async () => {
     for (let i = 0; i < organizationsCreated.length; i++) {
         for (let j = 0; j < categoriesCreated.length; j++) {
             for (let k = 0; k < allSubCategories.length; k++) {
-                allSubCategories[k].organization = organizationsCreated[i]
-                allSubCategories[k].category = categoriesCreated[j]
-                allSubCategories[k].name = `Sub Category ${k+1}_${j+1} `
-                SubCategory.create(allSubCategories[k]) ///Verify
+                const subCategoryExist = await SubCategory.find({ organization: categoriesCreated[j].organization, category: categoriesCreated[j] })
+                if (subCategoryExist.length == 0) {
+                    allSubCategories[k].organization = categoriesCreated[j].organization
+                    allSubCategories[k].category = categoriesCreated[j]
+                    allSubCategories[k].name = `Sub Category ${k+1}`
+                    SubCategory.create(allSubCategories[k])
+
+                } ///Verify
             }
         }
     }

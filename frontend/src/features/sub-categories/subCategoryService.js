@@ -14,7 +14,8 @@ const setConfig = (token) => {
 
 // Get subcategories
 const getSubCategories = async (organization) => {
-  const response = await axios.get(`${API_URL}${organization}`)
+  const response = await axios.get(`${API_URL}${organization}`) /// <- Verify
+  //console.log(response.data) 64636f2425cc66d6802202c4
   return response.data
 }
 
