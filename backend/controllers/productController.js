@@ -22,13 +22,11 @@ const getProducts = asyncHandler(async (req, res) => {
     const products = await Product.find({ organization: req.params.organization })
 
     for (let i = 0 ; i < products.length; i++) {
-        const idCategory = products[i].category
-        const idSubCategory = products[i].sub_category
-        const category = await Category.findById(idCategory)
-        const subCategory = await SubCategory.findById(idSubCategory)
+        const newCategory = await Category.findById(products[i].category)
+        const newSubCategory = await SubCategory.findById(products[i].sub_category)
         
-        idCategory.category = category
-        idSubCategory.sub_category = subCategory
+        products[i].category = newCategory
+        products[i].sub_category = newSubCategory
     }
 
     res.status(200).json(products)
