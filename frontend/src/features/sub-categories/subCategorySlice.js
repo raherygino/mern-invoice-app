@@ -41,7 +41,8 @@ export const getSubCategoriesByCategory = createAsyncThunk(
   'subcategories/bycategory',
   async (category, thunkAPI) => {
     try {
-      return await subCategoryService.getSubCategoriesByCategory(category)
+      const organization = thunkAPI.getState().auth.user.organization
+      return await subCategoryService.getSubCategoriesByCategory(category, organization)
     } catch (error) {
       const message =
         (error.response &&

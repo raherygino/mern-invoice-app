@@ -36,8 +36,8 @@ const columnsProducts = (handleShow,handleEdit) => {
             name: 'Actions',
             cell: row => 
                 <>
-                    <Button variant="primary" onClick={() => handleShow(row)} className="btn-shadow px-1" size="sm">Show </Button>
-                    <Button variant="success" onClick={() => handleEdit(row)} className="btn-shadow ms-2 px-1" size="sm">Edit</Button>
+                    <Button variant="primary" onClick={() => handleShow(row)} className="btn-shadow px-2" size="sm">Show </Button>
+                    <Button variant="success" onClick={() => handleEdit(row)} className="btn-shadow ms-2 px-2" size="sm">Edit</Button>
                 </>,
             ignoreRowClick: true,
             allowOverflow: true,

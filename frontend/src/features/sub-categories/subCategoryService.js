@@ -19,8 +19,8 @@ const getSubCategories = async (organization) => {
 }
 
 // Get subcategory by category
-const getSubCategoriesByCategory = async (category) => {
-  const response = await axios.get(`${API_URL}bycategory/${category}`)
+const getSubCategoriesByCategory = async (category, organization) => {
+  const response = await axios.get(`${API_URL}bycategory/${category}/${organization}`)
   return response.data
 }
 
