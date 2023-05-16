@@ -35,7 +35,7 @@ const ListProducts = () => {
 
     useEffect(() => {
         dispatch(getProducts())
-
+        //console.log(products)
         return () => {
             dispatch(reset())
         }

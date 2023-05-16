@@ -1,11 +1,18 @@
 const asyncHandler = require('express-async-handler')
 const Product = require('../models/productModel')
+const Category = require('../models/categoryModel')
 
 // @desc   set product
 // @route  POST /api/products
 // @access Private
 const setProduct = asyncHandler(async (req, res) => {
+    
+    const category = await Category.findById(req.body.category)
+    req.body.category = category
+    
+    console.log(req.body)
     Product.create(req.body).then((result) => {
+        console.log(result)
         res.status(200).json(result)
     }).catch((error) => {
         res.status(400).json(error)
@@ -17,9 +24,14 @@ const setProduct = asyncHandler(async (req, res) => {
 // @access  Private
 const getProducts = asyncHandler(async (req, res) => {
     const products = await Product.find({ organization: req.params.organization })
+
+    for (let i = 0 ; i < products.length; i++) {
+        const category = await Category.findById(products[i].category)
+        products[i].category = category
+    }
+
     res.status(200).json(products)
 })
-
 
 const deleteMore = asyncHandler(async (req, res) => {
     const query = req.query

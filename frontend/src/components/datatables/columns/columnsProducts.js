@@ -10,7 +10,7 @@ const columnsProducts = (handleShow,handleEdit) => {
         },
         {
             name: 'Category',
-            selector: row => row.category,
+            selector: row => row.category.name,
             sortable: true,
         },
         {
@@ -23,6 +23,13 @@ const columnsProducts = (handleShow,handleEdit) => {
             selector: row => row.price,
             sortable: true,
             right: true,
+        },
+        {
+            name: 'Created at',
+            selector: row => row.createdAt,
+            sortable: true,
+            right: true,
+            grow: 2,
         },
         {
             
