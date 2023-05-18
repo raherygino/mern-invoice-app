@@ -5,6 +5,7 @@ import ShowProduct from "../pages/products/ShowProduct"
 import NewInvoice from "../pages/invoices/NewInvoice"
 import Invoices from "../pages/invoices/Invoices"
 import NotFound from "../pages/notFound/index"
+import UploadFile from "../pages/uploadFile/UploadFile"
 
 const MainRoutes = {
     path: '/',
@@ -14,6 +15,11 @@ const MainRoutes = {
             name: 'New product',
             path: '/new_product',
             element: <NewProduct />
+        },
+        {
+            name: 'Upload',
+            path: '/upload_file',
+            element: <UploadFile />
         },
         {
             name: 'All products',
