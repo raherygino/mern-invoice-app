@@ -16,6 +16,7 @@
     "react-data-table-component": "^7.5.3",
     "react-dom": "^18.2.0",
     "react-draft-wysiwyg": "^1.15.0",
+    "react-dropzone": "^14.2.3",
     "react-feather": "^2.0.10",
     "react-icons": "^4.3.1",
     "react-quill": "^2.0.0",
