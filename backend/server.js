@@ -25,6 +25,7 @@ app.use('/api/organizations', require('./routes/organizationRoutes'));
 app.use('/api/categories', require('./routes/categoryRoutes'))
 app.use('/api/subcategories', require('./routes/subCategoryRoutes'))
 app.use('/api/products', require('./routes/productRoutes'))
+app.use('', require('./routes/file.routes'))
 
 // Serve frontend
 if (process.env.NODE_ENV === 'production') {
