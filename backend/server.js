@@ -33,24 +33,6 @@ app.use('/api/products', require('./routes/productRoutes'))
 router.post('/fileupload', async (req, res) => {
   try {
     await UploadFile(req, res);
-    fs .readdir('./backend/uploads', function (err, files) {
-      if (err) {
-        res.status(500).send({
-          message: "Unable to scan files!",
-        });
-      }
-  
-      let fileInfos = [];
-  /*
-      files.forEach((file) => {
-        fileInfos.push({
-          name: file,
-          url: 'http://localhost:5000/' + file,
-        });
-      });
-  
-      res.status(200).send(fileInfos);*/
-    });
     res.status(200).send({"msf": "Dd"})
   } catch (error) {
     console.log(error)
