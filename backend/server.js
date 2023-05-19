@@ -1,14 +1,18 @@
 const path = require('path');
+const fs = require("fs");
 const express = require('express');
 const colors = require('colors');
 const dotenv = require('dotenv').config();
 const { errorHandler } = require('./middleware/errorMiddleware');
 const connectDB = require('./config/db');
+const UploadFile = require('./services/uploadFile');
+const multer = require('multer');
 const port = process.env.PORT || 5000;
 
 connectDB();
 
 const app = express();
+const router = express.Router()
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -25,7 +29,35 @@ app.use('/api/organizations', require('./routes/organizationRoutes'));
 app.use('/api/categories', require('./routes/categoryRoutes'))
 app.use('/api/subcategories', require('./routes/subCategoryRoutes'))
 app.use('/api/products', require('./routes/productRoutes'))
-app.use('', require('./routes/file.routes'))
+
+router.post('/fileupload', async (req, res) => {
+  try {
+    await UploadFile(req, res);
+    fs .readdir('./backend/uploads', function (err, files) {
+      if (err) {
+        res.status(500).send({
+          message: "Unable to scan files!",
+        });
+      }
+  
+      let fileInfos = [];
+  /*
+      files.forEach((file) => {
+        fileInfos.push({
+          name: file,
+          url: 'http://localhost:5000/' + file,
+        });
+      });
+  
+      res.status(200).send(fileInfos);*/
+    });
+    res.status(200).send({"msf": "Dd"})
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+app.use(router)
 
 // Serve frontend
 if (process.env.NODE_ENV === 'production') {
