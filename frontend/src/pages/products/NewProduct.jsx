@@ -20,8 +20,9 @@ import { getSubCategories, getSubCategoriesByCategory } from '../../features/sub
 import ListSubCategoryModal from './modals/ListSubCategoryModal'
 import Svg from '../../components/icons/Svg'
 import Menu from '../../menu'
-import { createProduct, reset } from '../../features/products/productSlice'
+import { createProduct, reset, uploadImageProduct } from '../../features/products/productSlice'
 import BreadCrumb from '../../components/layout/BreadCrumb'
+import placholder from '../../assets/img/placeholder.png'
 
 const NewProduct = () => {  
 
@@ -37,7 +38,7 @@ const NewProduct = () => {
         (state) =>  state.subCategories
     )
 
-    const { products, createOrUpdate, product } = useSelector(
+    const { products, createOrUpdate, product, upload } = useSelector(
         (state) => state.products
     )
 
@@ -60,6 +61,11 @@ const NewProduct = () => {
         organization: userAuth.organization,
         user: userAuth._id,
     })
+    
+    const [file, setFile] = useState({
+        name: null,
+        url: placholder
+    })
 
     useEffect(() => {
         if (stateCreate.isSuccess) {
@@ -80,12 +86,25 @@ const NewProduct = () => {
         if (createOrUpdate.isError) {
             toast.error(createOrUpdate.message)
         }
+
+        if (upload.filename != null) {
+
+            setDataProduct((prevState) => ({
+                ...prevState,
+                'image' : upload.filename  }
+            ))
+            dataProduct.image = upload.filename
+            console.log(dataProduct)
+            console.log(upload.filename)
+
+            dispatch(createProduct(dataProduct))
+        }
         
         return () => {
             dispatch(reset())
         }
 
-    }, [setConfig, stateCreate, subCategoryCreate, products, createOrUpdate, dispatch, navigate, product])
+    }, [setConfig, stateCreate, subCategoryCreate, products, createOrUpdate, upload, dispatch, navigate, product, dataProduct])
 
     const onEdit = (index) => {
         setConfig({
@@ -114,11 +133,34 @@ const NewProduct = () => {
                 description : e }
             ))
         } else {
-            setDataProduct((prevState) => ({
-                ...prevState,
-                [e.target.name] : e.target.value }
-            ))
+            if (e.target.name === "image") {
+                const fileSelected = e.target.files
+                if (fileSelected.length === 0) {
+                    setFile({
+                        name: null,
+                        url: placholder
+                    })
+                } else {
+                    setFile({
+                        name: fileSelected,
+                        url: URL.createObjectURL(fileSelected[0])
+                    })
+
+                }
+            } else {
+                setDataProduct((prevState) => ({
+                    ...prevState,
+                    [e.target.name] : e.target.value }
+                ))
+            }
         }
+    }
+
+    const clearFile = () => {
+        setFile({
+            name: null,
+            url: placholder
+        })
     }
     
     const onSuccess = () => {
@@ -136,15 +178,17 @@ const NewProduct = () => {
 
     const onSubmit = (e) => {
         e.preventDefault()
-        dispatch(createProduct(dataProduct))
+        if (file.name !== null) {
+            const formData = new FormData()
+            formData.append('image', file.name[0])
+            dispatch(uploadImageProduct(formData))
+        } else {
+            dispatch(createProduct(dataProduct))
+        }
     }
 
     dispatch(getCategories())
     dispatch(getSubCategories())
-
-    if (user === undefined) {
-        return(<>Error</>)
-    }
 
     return(
         <>
@@ -211,58 +255,92 @@ const NewProduct = () => {
             <Container className="mt-6">
                 <Card>
                     <Card.Body>
-                        <Card.Title className='mb-5'>New product</Card.Title>
-                        <form onSubmit={onSubmit}>
-                        <Row>
-                            <Col lg={3} md={6}>
-                                <Input
-                                    id="name"
-                                    type="text"
-                                    label="Product name"
-                                    onChange={onChange} />
-                            </Col>
-                            <Col lg={3} md={6}>
-                                <Select
-                                    id="category"
-                                    label="Category"
-                                    onChange={onChange}>
-                                        <option value="">Select</option>
-                                        { categories.organization === undefined && categories.message === undefined ? categories.map((category) => (
-                                            <option key={category._id} value={category._id} >{ category.name }</option>
-                                        )) : <option>None</option> }
-                                </Select>
-                            </Col>
-                            <Col lg={3} md={6}>
-                                <Select
-                                    id="sub_category"
-                                    label="Sub category"
-                                    onChange={onChange}>
-                                    <option value="">Select</option>
-                                    { subCategoriesByCategory.message === undefined ? subCategoriesByCategory.map((subCategory) => (
-                                        <option key={subCategory._id} value={subCategory._id}> { subCategory.name } </option>
-                                    )): null }
-                                </Select>
-                            </Col>
-                            <Col lg={3} md={6}>
-                                <Input
-                                    id="price"
-                                    type="number"
-                                    label="Price"
-                                    onChange={onChange}/>
-                            </Col>
-                        </Row>
-                        
-                        <ReactQuill theme="snow" name="description" onChange={onChange} />
+                        <form onSubmit={onSubmit} encType="multipart/form-data">
+                            <Row>
+                                <Col md={2} lg={2}>
+                                    <center>
+                                    <p className='text-primary'>Image product</p>
+                                    <div className="image-input" id="kt_image_2">
+                                        <div className="image-input-wrapper" style={ { backgroundImage: `url(${file.url})` } }></div>
+                                        <input 
+                                            type="file" 
+                                            id='img-prod'
+                                            name='image'
+                                            onChange={onChange}
+                                            hidden  />
+                                    </div> <br />
+                                    <label className='btn btn-outline-primary btn-shadow mt-2' htmlFor="img-prod">Choose file</label>
+                                        <Button variant="outline-danger pe-0 ps-2 ms-1" onClick={clearFile}>
+                                            <span class="svg-icon">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                    <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+                                                        <g transform="translate(12.000000, 12.000000) rotate(-45.000000) translate(-12.000000, -12.000000) translate(4.000000, 4.000000)" fill="#000000">
+                                                            <rect x="0" y="7" width="16" height="2" rx="1"/>
+                                                            <rect opacity="0.3" transform="translate(8.000000, 8.000000) rotate(-270.000000) translate(-8.000000, -8.000000) " x="0" y="7" width="16" height="2" rx="1"/>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                            </span>
+                                        </Button>
+                                    </center>   
+                                </Col>                                                                                                              
+                                <Col md={10} lg={10}>
+                                    <Row>
+                                        <Col lg={3} md={6}>
+                                            <Input
+                                                id="name"
+                                                type="text"
+                                                label="Product name"
+                                                onChange={onChange} />
+                                        </Col>
+                                        <Col lg={3} md={6}>
+                                            <Select
+                                                id="category"
+                                                label="Category"
+                                                onChange={onChange}>
+                                                <option value="">Select</option>
+                                                    { categories.organization === undefined && categories.message === undefined ? categories.map((category) => (
+                                                    <option key={category._id} value={category._id} >{ category.name }</option>
+                                                    )) : <option>None</option> }
+                                            </Select>
+                                        </Col>
+                                        <Col lg={3} md={6}>
+                                        <Select
+                                            id="sub_category"
+                                            label="Sub category"
+                                            onChange={onChange}>
+                                            <option value="">Select</option>
+                                            { subCategoriesByCategory.message === undefined ? subCategoriesByCategory.map((subCategory) => (
+                                                <option key={subCategory._id} value={subCategory._id}> { subCategory.name } </option>
+                                            )): null }
+                                        </Select>
+                                    </Col>
+                                    <Col lg={3} md={6}>
+                                        <Input
+                                            id="price"
+                                            type="number"
+                                            label="Price"
+                                            onChange={onChange}/>
+                                        </Col>
+                                    </Row>
+                                    <ReactQuill theme="snow" name="description" onChange={onChange} />
 
-                        <Button 
-                            variant="primary"
-                            type='submit'
-                            className='mt-2'>
-                                Add
-                        </Button>
-
+                                    <Button 
+                                        variant="primary btn-shadow"
+                                        type='submit'
+                                        className='mt-2'>
+                                        <span className="svg-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+                                                    <rect fill="#000000" x="4" y="11" width="16" height="2" rx="1"/>
+                                                    <rect fill="#000000" opacity="0.3" transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000) " x="4" y="11" width="16" height="2" rx="1"/>
+                                                </g>
+                                            </svg>
+                                        </span>  Add
+                                    </Button>
+                                </Col>
+                            </Row>
                         </form>
-
                     </Card.Body>
                 </Card>
             </Container>

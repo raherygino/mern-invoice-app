@@ -1,3 +1,6 @@
+import { useDispatch } from "react-redux"
+import { uploadImageProduct } from "../../features/products/productSlice"
+
 const { default: axios } = require("axios")
 const { useState } = require("react")
 
@@ -5,6 +8,7 @@ const { useState } = require("react")
 const UploadFile = () => {
 
     const [file, setFile] = useState()
+    const dispatch = useDispatch()
 
     const onFormSubmit = (e) => {
         e.preventDefault()
@@ -12,14 +16,14 @@ const UploadFile = () => {
         if (file !== undefined) {
             if (file.length !== 0) {
                 const formData = new FormData()
-                formData.append('file', file[0])
-        
-                axios.post('http://localhost:5000/fileupload', formData)
+                formData.append('image', file[0])
+                dispatch(uploadImageProduct(formData))/*
+                axios.post('http://localhost:5000/api/files/upload-image-product', formData)
                     .then((response) => {
                         console.log(response)
                     }).catch((error) => {
                         console.log(error)
-                    })
+                    })*/
             }
 
         }

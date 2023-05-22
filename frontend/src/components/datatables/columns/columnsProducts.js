@@ -20,7 +20,7 @@ const columnsProducts = (handleShow,handleEdit) => {
         },
         {
             name: 'Price',
-            selector: row => row.price,
+            selector: row => row.image,
             sortable: true,
             right: true,
         },
