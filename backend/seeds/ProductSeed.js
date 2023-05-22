@@ -15,7 +15,8 @@ const products = (length) => {
             category: '',
             sub_category: '',
             price: rand(1000, 9999),
-            description: `Description ${i}`
+            description: `Description ${i}`,
+            image: '',
         })
     }
 
