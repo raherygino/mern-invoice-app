@@ -1,10 +1,11 @@
-const express = require("express");
-const router = express.Router();
-const controller = require("../controllers/file.controller");
+const express = require('express')
+const router = express.Router()
 
-router.post("/upload", controller.upload);
-router.get("/files", controller.getListFiles);
-router.get("/files/:name", controller.download);
-router.delete("/files/:name", controller.remove);
+const { uploadImageProduct } = require('../controllers/file.controller')
 
-module.exports = router;
+const { protect } = require('../middleware/authMiddleware')
+const path = require('path')
+
+router.post('/upload-image-product',protect, uploadImageProduct)
+
+module.exports = router
