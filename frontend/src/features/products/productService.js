@@ -17,6 +17,12 @@ const createProduct = async (productData, token) => {
   return response.data
 }
 
+// Upload image
+const uploadImageProduct = async(formData, token) => {
+  const response = await axios.post('http://localhost:5000/api/files/upload-image-product', formData, setConfig(token))
+  return response.data
+}
+
 // Get products
 const getProducts = async (organization) => {
   const response = await axios.get(`${API_URL}get/${organization}`)
@@ -33,6 +39,7 @@ const productService = {
     createProduct,
     getProduct,
     getProducts,
+    uploadImageProduct
 }
 
 export default productService

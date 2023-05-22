@@ -22,16 +22,41 @@ const initialState = {
         isSuccess: false,
         isLoading: false,
         message: '',
+    },
+    upload : {
+      isError: false,
+      isSuccess: false,
+      isLoading: false,
+      filename: null,
     }
 }
 
 // Create new product
 export const createProduct = createAsyncThunk(
   'product/create',
-  async (productData, thunkAPI) => {
+  async (productData,  thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.userAuth.token
       return await productService.createProduct(productData, token)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+// UploadFile
+export const uploadImageProduct = createAsyncThunk(
+  'product/image',
+  async (formData, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.userAuth.token
+      return await productService.uploadImageProduct(formData, token)
     } catch (error) {
       const message =
         (error.response &&
@@ -102,6 +127,20 @@ export const productSlice = createSlice({
                 state.createOrUpdate.isLoading = false
                 state.createOrUpdate.isError = true
                 state.createOrUpdate.message = action.payload
+            })
+
+            .addCase(uploadImageProduct.pending, (state) => {
+                state.upload.isLoading = true
+            })
+            .addCase(uploadImageProduct.fulfilled, (state, action) => {
+                state.upload.isLoading = false
+                state.upload.isSuccess = true
+                state.upload.filename = action.payload.filename
+            }) 
+            .addCase(uploadImageProduct.rejected, (state, action) => {
+                state.upload.isLoading = false
+                state.upload.isError = true
+                state.upload.message = action.payload
             })
 
             .addCase(getProducts.pending, (state) => {

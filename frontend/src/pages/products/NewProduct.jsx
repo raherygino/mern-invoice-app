@@ -20,8 +20,9 @@ import { getSubCategories, getSubCategoriesByCategory } from '../../features/sub
 import ListSubCategoryModal from './modals/ListSubCategoryModal'
 import Svg from '../../components/icons/Svg'
 import Menu from '../../menu'
-import { createProduct, reset } from '../../features/products/productSlice'
+import { createProduct, reset, uploadImageProduct } from '../../features/products/productSlice'
 import BreadCrumb from '../../components/layout/BreadCrumb'
+import placholder from '../../assets/img/placeholder.png'
 
 const NewProduct = () => {  
 
@@ -37,7 +38,7 @@ const NewProduct = () => {
         (state) =>  state.subCategories
     )
 
-    const { products, createOrUpdate, product } = useSelector(
+    const { products, createOrUpdate, product, upload } = useSelector(
         (state) => state.products
     )
 
@@ -60,6 +61,11 @@ const NewProduct = () => {
         organization: userAuth.organization,
         user: userAuth._id,
     })
+    
+    const [file, setFile] = useState({
+        name: null,
+        url: placholder
+    })
 
     useEffect(() => {
         if (stateCreate.isSuccess) {
@@ -80,12 +86,25 @@ const NewProduct = () => {
         if (createOrUpdate.isError) {
             toast.error(createOrUpdate.message)
         }
+
+        if (upload.filename != null) {
+
+            setDataProduct((prevState) => ({
+                ...prevState,
+                'image' : upload.filename  }
+            ))
+            dataProduct.image = upload.filename
+            console.log(dataProduct)
+            console.log(upload.filename)
+
+            dispatch(createProduct(dataProduct))
+        }
         
         return () => {
             dispatch(reset())
         }
 
-    }, [setConfig, stateCreate, subCategoryCreate, products, createOrUpdate, dispatch, navigate, product])
+    }, [setConfig, stateCreate, subCategoryCreate, products, createOrUpdate, upload, dispatch, navigate, product, dataProduct])
 
     const onEdit = (index) => {
         setConfig({
@@ -114,11 +133,34 @@ const NewProduct = () => {
                 description : e }
             ))
         } else {
-            setDataProduct((prevState) => ({
-                ...prevState,
-                [e.target.name] : e.target.value }
-            ))
+            if (e.target.name === "image") {
+                const fileSelected = e.target.files
+                if (fileSelected.length === 0) {
+                    setFile({
+                        name: null,
+                        url: placholder
+                    })
+                } else {
+                    setFile({
+                        name: fileSelected,
+                        url: URL.createObjectURL(fileSelected[0])
+                    })
+
+                }
+            } else {
+                setDataProduct((prevState) => ({
+                    ...prevState,
+                    [e.target.name] : e.target.value }
+                ))
+            }
         }
+    }
+
+    const clearFile = () => {
+        setFile({
+            name: null,
+            url: placholder
+        })
     }
     
     const onSuccess = () => {
@@ -136,15 +178,17 @@ const NewProduct = () => {
 
     const onSubmit = (e) => {
         e.preventDefault()
-        dispatch(createProduct(dataProduct))
+        if (file.name !== null) {
+            const formData = new FormData()
+            formData.append('image', file.name[0])
+            dispatch(uploadImageProduct(formData))
+        } else {
+            dispatch(createProduct(dataProduct))
+        }
     }
 
     dispatch(getCategories())
     dispatch(getSubCategories())
-
-    if (user === undefined) {
-        return(<>Error</>)
-    }
 
     return(
         <>
@@ -211,23 +255,35 @@ const NewProduct = () => {
             <Container className="mt-6">
                 <Card>
                     <Card.Body>
-                        <Card.Title className='mb-5'>New product</Card.Title>
-                        <form onSubmit={onSubmit}>
+                        <form onSubmit={onSubmit} encType="multipart/form-data">
                             <Row>
                                 <Col md={2} lg={2}>
-                                    <label htmlFor='img-prod' className='btn-text-primary btn-hover-light-primary ps-3 pe-2 cursor-pointer'>
-                                        <span class="svg-icon svg-icon-10x">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-                                                    <polygon points="0 0 24 0 24 24 0 24"/>
-                                                    <path d="M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
-                                                    <path d="M11,14 L9,14 C8.44771525,14 8,13.5522847 8,13 C8,12.4477153 8.44771525,12 9,12 L11,12 L11,10 C11,9.44771525 11.4477153,9 12,9 C12.5522847,9 13,9.44771525 13,10 L13,12 L15,12 C15.5522847,12 16,12.4477153 16,13 C16,13.5522847 15.5522847,14 15,14 L13,14 L13,16 C13,16.5522847 12.5522847,17 12,17 C11.4477153,17 11,16.5522847 11,16 L11,14 Z" fill="#000000"/>
-                                                </g>
-                                            </svg>
-                                        </span>
-                                        <input type="file" hidden id='img-prod' />
-                                    </label>
-                                </Col>
+                                    <center>
+                                    <p className='text-primary'>Image product</p>
+                                    <div className="image-input" id="kt_image_2">
+                                        <div className="image-input-wrapper" style={ { backgroundImage: `url(${file.url})` } }></div>
+                                        <input 
+                                            type="file" 
+                                            id='img-prod'
+                                            name='image'
+                                            onChange={onChange}
+                                            hidden  />
+                                    </div> <br />
+                                    <label className='btn btn-outline-primary btn-shadow mt-2' htmlFor="img-prod">Choose file</label>
+                                        <Button variant="outline-danger pe-0 ps-2 ms-1" onClick={clearFile}>
+                                            <span class="svg-icon">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                    <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+                                                        <g transform="translate(12.000000, 12.000000) rotate(-45.000000) translate(-12.000000, -12.000000) translate(4.000000, 4.000000)" fill="#000000">
+                                                            <rect x="0" y="7" width="16" height="2" rx="1"/>
+                                                            <rect opacity="0.3" transform="translate(8.000000, 8.000000) rotate(-270.000000) translate(-8.000000, -8.000000) " x="0" y="7" width="16" height="2" rx="1"/>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                            </span>
+                                        </Button>
+                                    </center>   
+                                </Col>                                                                                                              
                                 <Col md={10} lg={10}>
                                     <Row>
                                         <Col lg={3} md={6}>
@@ -273,7 +329,7 @@ const NewProduct = () => {
                                         variant="primary btn-shadow"
                                         type='submit'
                                         className='mt-2'>
-                                        <span class="svg-icon">
+                                        <span className="svg-icon">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                                 <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
                                                     <rect fill="#000000" x="4" y="11" width="16" height="2" rx="1"/>
