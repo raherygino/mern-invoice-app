@@ -1,33 +1,54 @@
 {
-  "name": "invoice-app",
-  "version": "1.0.0",
-  "homepage": "https://raherygino.github.io/api-mern",
-  "description": "Invoice app with MongoDB, Express, React & Node",
-  "main": "index.js",
-  "scripts": {
-    "start": "node backend/server.js",
-    "build": "webpack --config webpack.config.js",
-    "server": "nodemon backend/server.js",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "colors": "^1.4.0",
-    "dotenv": "^15.0.0",
-    "express": "^4.17.2",
-    "express-async-handler": "^1.2.0",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.1.9",
-    "multer": "^1.4.5-lts.1"
+    "@iconscout/react-unicons": "^2.0.2",
+    "@reduxjs/toolkit": "^1.7.2",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^0.25.0",
+    "bootstrap": "^5.2.3",
+    "draft-js": "^0.11.7",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.7.4",
+    "react-data-table-component": "^7.5.3",
+    "react-dom": "^18.2.0",
+    "react-draft-wysiwyg": "^1.15.0",
+    "react-dropzone": "^14.2.3",
+    "react-feather": "^2.0.10",
+    "react-icons": "^4.3.1",
+    "react-quill": "^2.0.0",
+    "react-redux": "^7.2.6",
+    "react-router-dom": "^6.2.1",
+    "react-scripts": "5.0.1",
+    "react-toastify": "^8.1.1",
+    "sweetalert2": "^11.7.3",
+    "web-vitals": "^2.1.4"
   },
-  "devDependencies": {
-    "concurrently": "^7.0.0",
-    "gh-pages": "^5.0.0",
-    "nodemon": "^2.0.15"
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
