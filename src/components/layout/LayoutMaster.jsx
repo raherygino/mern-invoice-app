@@ -37,6 +37,8 @@ const LayoutMaster = () => {
       navigate('/login')
     }
 
+   // onLogout();
+
     return(
         <>
             <Navbar bg="dark" variant='dark' expand="lg">

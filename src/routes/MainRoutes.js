@@ -22,14 +22,14 @@ const MainRoutes = {
             element: <UploadFile />
         },
         {
-            name: 'All products',
-            path: '/products',
-            element: <ListProducts />
-        },
-        {
             name: 'show_product',
             path: '/products/show/:id',
             element: <ShowProduct />
+        },
+        {
+            name: 'All products',
+            path: '/products',
+            element: <ListProducts />
         },
         {
             name: 'edit_product',
